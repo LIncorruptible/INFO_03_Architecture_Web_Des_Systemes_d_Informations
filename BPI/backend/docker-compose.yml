@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: bpi-mongo
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./data:/data/db
+    env_file:
+      - .env
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    driver: bridge
