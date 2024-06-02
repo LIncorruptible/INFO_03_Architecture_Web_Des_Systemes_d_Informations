@@ -4,8 +4,7 @@ import { MaterialModel } from "../models/material.model";
 
 import { HTTP_STATUS } from "../constants/http_status";
 import { TagModel } from "../models/tag.model";
-import { ROLES_SCOPES } from "../constants/all_about_models";
-import { User, UserModel } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 
 const router = require("express").Router();
 
@@ -90,9 +89,54 @@ router.get(
                 { returnDeadline: { $regex: searchTerms, $options: 'i' } }
             ]
         });
-        res.send(materials);
+        if (materials) {
+            res.send(materials);
+        } else {
+            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Failed to fetch materials" });
+        }
     })
 );
+
+// GET /api/materials by taggedAs
+
+router.get(
+    "/taggedAs/:tagId",
+    expressAsyncHandler(async (req, res) => {
+        const tag = await TagModel.findById(req.params.tagId);
+        if (!tag) {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
+        }
+        const materials = await MaterialModel.find({ taggedAs: tag });
+        if (materials) {
+            res.send(materials);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Materials not found" });
+        }
+    })
+);
+
+// GET /api/materials by assignedTo
+
+router.get(
+    "/assignedTo/:userId",
+    expressAsyncHandler(async (req, res) => {
+
+        const targetUser = await UserModel.findById(req.params.userId);
+
+        if (!targetUser) {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
+        }
+
+        const materials = await MaterialModel.find({ assignedTo: targetUser });
+        if (materials) {
+            res.send(materials);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Materials not found" });
+        }
+    })
+
+);
+
 
 // POST /api/materials
 
@@ -110,10 +154,9 @@ router.post(
             returnDeadline
         });
         const createdMaterial = await material.save();
-        try {
-            const createdMaterial = await material.save();
+        if (createdMaterial) {
             res.status(HTTP_STATUS.CREATED).send(createdMaterial);
-        } catch (error) {
+        } else {
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Failed to create material" });
         }
     })
@@ -150,8 +193,8 @@ router.delete(
     expressAsyncHandler(async (req, res) => {
         const material = await MaterialModel.findById(req.params.id);
         if (material) {
-            const deletedMaterial = await material.deleteOne();
-            res.send(deletedMaterial);
+            await material.deleteOne();
+            res.send({ message: "Material deleted" });
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Material not found" });
         }

@@ -62,7 +62,12 @@ router.get(
                 { name: { $regex: searchTerms, $options: 'i' } }
             ]
         });
-        res.send(tags);
+        
+        if (tags) {
+            res.send(tags);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tags not found" });
+        }
     })
 );
 
@@ -75,11 +80,10 @@ router.post(
             name: req.body.name,
             acceptedRolesScopes: req.body.acceptedRolesScopes || ROLES_SCOPES
         });
-        try {
-
-            const createdTag = await tag.save();
+        const createdTag = await tag.save();
+        if (createdTag)  {
             res.status(HTTP_STATUS.CREATED).send(createdTag);
-        } catch (error) {
+        } else {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating tag" });
         }
     })
@@ -92,8 +96,6 @@ router.put(
     expressAsyncHandler(async (req, res) => {
         const tag = await TagModel.findById(req.params.id);
         if (tag) {
-
-
             tag.name = req.body.name || tag.name;
             tag.acceptedRolesScopes = req.body.acceptedRolesScopes || tag.acceptedRolesScopes;
             const updatedTag = await tag.save();

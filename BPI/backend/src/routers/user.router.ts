@@ -77,7 +77,32 @@ router.get(
             ]
         });
 
-        res.send(users);
+        if (users) {
+            res.send(users);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Users not found" });
+        }
+    })
+);
+
+// GET /api/users in relation to organization
+
+router.get(
+    "/organization/:organizationId",
+    expressAsyncHandler(async (req, res) => {
+
+        const targetOrganization = await OrganizationModel.findById(req.params.organizationId);
+
+        if (!targetOrganization) {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
+        }
+
+        const users = await UserModel.find({ assignedTo: targetOrganization });
+        if (users) {
+            res.send(users);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Users not found" });
+        }
     })
 );
 
@@ -94,11 +119,10 @@ router.post(
             assignedTo: req.body.assignedTo,
             roleScope: req.body.roleScope
         });
-        try {
-
-            const createdUser = await user.save();
+        const createdUser = await user.save();
+        if (createdUser) {
             res.status(HTTP_STATUS.CREATED).send(createdUser);
-        } catch (error) {
+        } else {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating user" });
         }
     })
@@ -109,23 +133,23 @@ router.post(
 router.put(
     "/update/:id",
     expressAsyncHandler(async (req, res) => {
-        try {
-            const user = await UserModel.findById(req.params.id);
-            if (user) {
-                user.username = req.body.username || user.username;
-                user.email = req.body.email || user.email;
-                user.firstName = req.body.firstName || user.firstName;
-                user.lastName = req.body.lastName || user.lastName;
-                user.assignedTo = req.body.assignedTo || user.assignedTo;
-                user.roleScope = req.body.roleScope || user.roleScope;
+        const user = await UserModel.findById(req.params.id);
+        if (user) {
+            user.username = req.body.username || user.username;
+            user.email = req.body.email || user.email;
+            user.firstName = req.body.firstName || user.firstName;
+            user.lastName = req.body.lastName || user.lastName;
+            user.assignedTo = req.body.assignedTo || user.assignedTo;
+            user.roleScope = req.body.roleScope || user.roleScope;
 
-                const updatedUser = await user.save();
+            const updatedUser = await user.save();
+            if (updatedUser) {
                 res.send(updatedUser);
             } else {
-                res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
+                res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Error updating user" });
             }
-        } catch (error) {
-            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating user" });
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
         }
     })
 );
