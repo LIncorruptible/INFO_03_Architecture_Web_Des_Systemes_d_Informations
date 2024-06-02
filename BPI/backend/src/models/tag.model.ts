@@ -9,7 +9,7 @@ export interface Tag {
 }
 
 const tagSchema = new Schema<Tag>({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true},
     acceptedRolesScopes: { type: [String], required: true, enum: ROLES_SCOPES },
 });
 

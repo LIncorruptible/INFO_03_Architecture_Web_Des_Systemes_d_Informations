@@ -8,7 +8,7 @@ export interface Organization {
 }
 
 const organizationSchema = new Schema<Organization>({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true},
     department: { type: String, required: true }
 });
 
