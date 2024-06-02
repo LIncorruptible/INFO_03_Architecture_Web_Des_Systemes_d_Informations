@@ -13,7 +13,11 @@ router.get(
     "/",
     expressAsyncHandler(async (req, res) => {
         const users = await UserModel.find({});
-        res.send(users);
+        if (users) {
+            res.send(users);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Users not found" });
+        }
     })
 );
 
@@ -54,11 +58,11 @@ router.get(
 );
 
 router.get(
-    "/user/:roleScope",
+    "/roleScope/:roleScope",
     expressAsyncHandler(async (req, res) => {
-        const user = await UserModel.find({ roleScope: req.params.roleScope });
-        if (user) {
-            res.send(user);
+        const users = await UserModel.find({ roleScope: req.params.roleScope });
+        if (users) {
+            res.send(users);
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
         }
@@ -85,7 +89,7 @@ router.get(
     })
 );
 
-// GET /api/users in relation to organization
+// GET /api/users in relation to Organization
 
 router.get(
     "/organization/:organizationId",
@@ -168,3 +172,5 @@ router.delete(
         }
     })
 );
+
+export default router;

@@ -43,7 +43,7 @@ router.get(
 );
 
 router.get(
-    "/material/:status",
+    "/status/:status",
     expressAsyncHandler(async (req, res) => {
         const material = await MaterialModel.find({ status: req.params.status });
         if (material) {
@@ -55,7 +55,7 @@ router.get(
 );
 
 router.get(
-    "/material/renewal/:renewalDateStart-:renewalDateEnd",
+    "/renewalDate/:renewalDateStart-:renewalDateEnd",
     expressAsyncHandler(async (req, res) => {
         const material = await MaterialModel.find({ renewalDate: { $gte: req.params.renewalDateStart, $lte: req.params.renewalDateEnd } });
         if (material) {
@@ -67,7 +67,7 @@ router.get(
 )
 
 router.get(
-    "/material/return/:returnDeadlineStart-:returnDeadlineEnd",
+    "/returnDeadLine/:returnDeadlineStart-:returnDeadlineEnd",
     expressAsyncHandler(async (req, res) => {
         const material = await MaterialModel.find({ returnDeadline: { $gte: req.params.returnDeadlineStart, $lte: req.params.returnDeadlineEnd } });
         if (material) {
@@ -97,7 +97,7 @@ router.get(
     })
 );
 
-// GET /api/materials by taggedAs
+// GET /api/materials in relation to Tag
 
 router.get(
     "/taggedAs/:tagId",
@@ -115,7 +115,7 @@ router.get(
     })
 );
 
-// GET /api/materials by assignedTo
+// GET /api/materials in relation to User
 
 router.get(
     "/assignedTo/:userId",
@@ -141,7 +141,7 @@ router.get(
 // POST /api/materials
 
 router.post(
-    "/",
+    "/add",
     expressAsyncHandler(async (req, res) => {
         const { name, imgPath, taggedAs, status, assignedTo, renewalDate, returnDeadline } = req.body;
         const material = new MaterialModel({
@@ -165,7 +165,7 @@ router.post(
 // PUT /api/materials
 
 router.put(
-    "/:id",
+    "/update/:id",
     expressAsyncHandler(async (req, res) => {
         const materialId = req.params.id;
         const material = await MaterialModel.findById(materialId);
@@ -189,7 +189,7 @@ router.put(
 // DELETE /api/materials
 
 router.delete(
-    "/:id",
+    "/delete/:id",
     expressAsyncHandler(async (req, res) => {
         const material = await MaterialModel.findById(req.params.id);
         if (material) {
@@ -200,3 +200,5 @@ router.delete(
         }
     })
 );
+
+export default router;

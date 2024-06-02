@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 
-import { Tag, TagModel } from "../models/tag.model";
+import { TagModel } from "../models/tag.model";
 
 import { ROLES_SCOPES } from "../constants/all_about_models";
 import { HTTP_STATUS } from "../constants/http_status";
@@ -13,7 +13,11 @@ router.get(
     "/",
     expressAsyncHandler(async (req, res) => {
         const tags = await TagModel.find({});
-        res.send(tags);
+        if (tags) {
+            res.send(tags);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tags not found" });
+        }
     })
 );
 
@@ -30,9 +34,9 @@ router.get(
 );
 
 router.get(
-    "/tag/:tagName",
+    "/tag/:name",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.findOne({ name: req.params.tagName });
+        const tag = await TagModel.findOne({ name: req.params.name });
         if (tag) {
             res.send(tag);
         } else {
@@ -42,11 +46,11 @@ router.get(
 );
 
 router.get(
-    "/tag/:acceptedRolesScopes",
+    "/acceptedRolesScopes/:acceptedRolesScopes",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.find({ acceptedRolesScopes: req.params.acceptedRolesScopes });
-        if (tag) {
-            res.send(tag);
+        const tags = await TagModel.find({ acceptedRolesScopes: req.params.acceptedRolesScopes });
+        if (tags) {
+            res.send(tags);
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
         }

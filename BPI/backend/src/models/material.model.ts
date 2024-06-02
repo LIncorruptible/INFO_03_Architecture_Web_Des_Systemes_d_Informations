@@ -16,7 +16,7 @@ export interface Material {
 }
 
 const materialSchema = new Schema<Material>({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true},
     taggedAs: { type: TagModel, required: true, ref: MODELS_NAMES.TAG},
     imgPath: { type: String, required: true },
     status: { type: String, required: true, enum: MATERIAL_STATUS},

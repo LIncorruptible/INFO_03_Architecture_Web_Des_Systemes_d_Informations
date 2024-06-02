@@ -12,7 +12,11 @@ router.get(
     "/",
     expressAsyncHandler(async (req, res) => {
         const organizations = await OrganizationModel.find({});
-        res.send(organizations);
+        if (organizations) {
+            res.send(organizations);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
+        }
     })
 );
 
@@ -29,9 +33,9 @@ router.get(
 );
 
 router.get(
-    "/organization/:orgaName",
+    "/organization/:name",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.findOne({ name: req.params.orgaName });
+        const organization = await OrganizationModel.findOne({ name: req.params.name });
         if (organization) {
             res.send(organization);
         } else {
@@ -41,11 +45,30 @@ router.get(
 );
 
 router.get(
-    "/organization/:orgaDepartment",
+    "/department/:department",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.find({ department: req.params.orgaDepartment });
-        if (organization) {
-            res.send(organization);
+        const organizations = await OrganizationModel.find({ department: req.params.department });
+        if (organizations) {
+            res.send(organizations);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
+        }
+    })
+);
+
+router.get(
+    "/search/:searchTerms",
+    expressAsyncHandler(async (req, res) => {
+        const searchTerms = req.params.searchTerms;
+        const organizations = await OrganizationModel.find({
+            $or: [
+                { name: { $regex: searchTerms, $options: "i" } },
+                { department: { $regex: searchTerms, $options: "i" } }
+            ]
+        });
+        
+        if (organizations) {
+            res.send(organizations);
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
         }
@@ -84,20 +107,6 @@ router.put(
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
         }
-    })
-);
-
-router.get(
-    "/search/:searchTerms",
-    expressAsyncHandler(async (req, res) => {
-        const searchTerms = req.params.searchTerms;
-        const organizations = await OrganizationModel.find({
-            $or: [
-                { name: { $regex: searchTerms, $options: "i" } },
-                { department: { $regex: searchTerms, $options: "i" } }
-            ]
-        });
-        res.send(organizations);
     })
 );
 
