@@ -41,6 +41,31 @@ router.get(
     })
 );
 
+router.get(
+    "/tag/:acceptedRolesScopes",
+    expressAsyncHandler(async (req, res) => {
+        const tag = await TagModel.find({ acceptedRolesScopes: req.params.acceptedRolesScopes });
+        if (tag) {
+            res.send(tag);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
+        }
+    })
+);
+
+router.get(
+    "/search/:searchTerms",
+    expressAsyncHandler(async (req, res) => {
+        const searchTerms = req.params.searchTerms;
+        const tags = await TagModel.find({
+            $or: [
+                { name: { $regex: searchTerms, $options: 'i' } }
+            ]
+        });
+        res.send(tags);
+    })
+);
+
 // POST /api/tags
 
 router.post(

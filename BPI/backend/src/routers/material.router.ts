@@ -79,6 +79,21 @@ router.get(
     })
 )
 
+router.get(
+    "/search/:searchTerms",
+    expressAsyncHandler(async (req, res) => {
+        const searchTerms = req.params.searchTerms;
+        const materials = await MaterialModel.find({
+            $or: [
+                { name: { $regex: searchTerms, $options: 'i' } },
+                { renewalDate: { $regex: searchTerms, $options: 'i' } },
+                { returnDeadline: { $regex: searchTerms, $options: 'i' } }
+            ]
+        });
+        res.send(materials);
+    })
+);
+
 // POST /api/materials
 
 router.post(

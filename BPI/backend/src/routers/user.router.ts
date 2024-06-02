@@ -65,6 +65,22 @@ router.get(
     })
 );
 
+router.get(
+    "/search/:searchTerms",
+    expressAsyncHandler(async (req, res) => {
+        const searchTerms = req.params.searchTerms;
+        const users = await UserModel.find({
+            $or: [
+                { username: { $regex: searchTerms, $options: 'i' } },
+                { email: { $regex: searchTerms, $options: 'i' } },
+                { roleScope: { $regex: searchTerms, $options: 'i' } }
+            ]
+        });
+
+        res.send(users);
+    })
+);
+
 // POST /api/users
 
 router.post(

@@ -87,6 +87,20 @@ router.put(
     })
 );
 
+router.get(
+    "/search/:searchTerms",
+    expressAsyncHandler(async (req, res) => {
+        const searchTerms = req.params.searchTerms;
+        const organizations = await OrganizationModel.find({
+            $or: [
+                { name: { $regex: searchTerms, $options: "i" } },
+                { department: { $regex: searchTerms, $options: "i" } }
+            ]
+        });
+        res.send(organizations);
+    })
+);
+
 // DELETE /api/organizations
 
 router.delete(
