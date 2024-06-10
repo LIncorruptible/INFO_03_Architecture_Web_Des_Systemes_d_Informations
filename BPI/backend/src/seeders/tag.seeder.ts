@@ -1,10 +1,10 @@
 import { ROLES_SCOPES } from "../constants/all_about_models";
 import { Tag } from "../models/tag.model";
-import { Faker } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 
 export class TagSeeder {
 
-    getTag(): Tag {
+    defTag(): Tag {
 
         let acceptedScopes: string[] = [];
 
@@ -18,18 +18,29 @@ export class TagSeeder {
         }
 
         const tag: Tag = {
-            id: Faker.prototype.datatype.uuid(),
-            name: Faker.prototype.lorem.word(),
+            id: faker.string.uuid(),
+            name: "[TAG]" + faker.lorem.word(),
             acceptedRolesScopes: acceptedScopes
         };
         return tag;
     }
 
-    getTags(amount: number): Tag[] {
+    defTags(amount: number): Tag[] {
         const tags: Tag[] = [];
         for (let i = 0; i < amount; i++) {
-            tags.push(this.getTag());
+            tags.push(this.defTag());
         }
+        return tags;
+    }
+    
+    defTagsAccordingToData(): Tag[] {
+        const tags: Tag[] = [
+            { id: faker.string.uuid(), name: "MOBILIER", acceptedRolesScopes: [] },
+            { id: faker.string.uuid(), name: "BUREAUTIQUE", acceptedRolesScopes: [] },
+            { id: faker.string.uuid(), name: "RESEAU", acceptedRolesScopes: [] },
+            { id: faker.string.uuid(), name: "INFORMATIQUE", acceptedRolesScopes: [] },
+            { id: faker.string.uuid(), name: "AUTRE", acceptedRolesScopes: [] }
+        ];
         return tags;
     }
 }

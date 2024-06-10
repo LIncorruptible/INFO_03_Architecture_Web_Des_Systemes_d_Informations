@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, SchemaType, model } from 'mongoose';
 import { User, UserModel } from './user.model';
 import { Material, MaterialModel } from './material.model';
 
@@ -14,8 +14,8 @@ export interface Request {
 }
 
 const requestSchema = new Schema<Request>({
-    requester: { type: UserModel, ref: MODELS_NAMES.USER, required: true },
-    material: { type: MaterialModel, ref: MODELS_NAMES.MATERIAL, required: true },
+    requester: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.USER, required: true },
+    material: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.MATERIAL, required: true },
     type: { type: String, required: true, enum: REQUEST_TYPES },
     status: { type: String, required: true, enum: REQUEST_STATUS },
     date: { type: Date, required: true },

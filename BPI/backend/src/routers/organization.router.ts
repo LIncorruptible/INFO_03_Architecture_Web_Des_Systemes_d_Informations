@@ -1,128 +1,85 @@
 import expressAsyncHandler from "express-async-handler";
-
-import { Organization, OrganizationModel } from "../models/organization.model";
-
-import { HTTP_STATUS } from "../constants/http_status";
+import { OrganizationController } from "../controllers/organization.controller";
 
 const router = require("express").Router();
-
-// GET /api/organizations
 
 router.get(
     "/",
     expressAsyncHandler(async (req, res) => {
-        const organizations = await OrganizationModel.find({});
-        if (organizations) {
-            res.send(organizations);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().getAll(req, res);
     })
 );
 
 router.get(
     "/organization/:id",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.findById(req.params.id);
-        if (organization) {
-            res.send(organization);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().getById(req, res);
     })
 );
 
 router.get(
     "/organization/:name",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.findOne({ name: req.params.name });
-        if (organization) {
-            res.send(organization);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().getByName(req, res);
     })
 );
 
 router.get(
     "/department/:department",
     expressAsyncHandler(async (req, res) => {
-        const organizations = await OrganizationModel.find({ department: req.params.department });
-        if (organizations) {
-            res.send(organizations);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().getByDepartment(req, res);
     })
 );
 
 router.get(
     "/search/:searchTerms",
     expressAsyncHandler(async (req, res) => {
-        const searchTerms = req.params.searchTerms;
-        const organizations = await OrganizationModel.find({
-            $or: [
-                { name: { $regex: searchTerms, $options: "i" } },
-                { department: { $regex: searchTerms, $options: "i" } }
-            ]
-        });
-        
-        if (organizations) {
-            res.send(organizations);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().getBySearchTerms(req, res);
     })
 );
 
-// POST /api/organizations
+router.get(
+    "/seed",
+    expressAsyncHandler(async (req, res) => {
+        return new OrganizationController().seed(req, res);
+    })
+);
+
+router.get(
+    "/seed/:numberOfOrganizations",
+    expressAsyncHandler(async (req, res) => {
+        return new OrganizationController().seed(req, res);
+    })
+);
 
 router.post(
     "/add",
     expressAsyncHandler(async (req, res) => {
-        const organization = new OrganizationModel({
-            name: req.body.name,
-            department: req.body.department
-        });
-        try {
-            const createdOrganization = await organization.save();
-            res.status(HTTP_STATUS.CREATED).send(createdOrganization);
-        } catch (error) {
-            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating organization" });
-        }
+        return new OrganizationController().add(req, res);
     })
 );
 
-// PUT /api/organizations
-
-router.put(
+router.post(
     "/update/:id",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.findById(req.params.id);
-        if (organization) {
-            organization.name = req.body.name || organization.name;
-            organization.department = req.body.department || organization.department;
-            const updatedOrganization = await organization.save();
-            res.send(updatedOrganization);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().update(req, res);
     })
 );
 
-// DELETE /api/organizations
-
-router.delete(
+router.get(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {
-        const organization = await OrganizationModel.findById(req.params.id);
-        if (organization) {
-            await organization.deleteOne();
-            res.send({ message: "Organization deleted successfully" });
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
-        }
+        return new OrganizationController().delete(req, res);
     })
 );
+
+router.get(
+    "/deleteAll",
+    expressAsyncHandler(async (req, res) => {
+        return new OrganizationController().deleteAll(req, res);
+    })
+);
+
+
 
 export default router;

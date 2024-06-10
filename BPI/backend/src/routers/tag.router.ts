@@ -1,128 +1,84 @@
 import expressAsyncHandler from "express-async-handler";
-
-import { TagModel } from "../models/tag.model";
-
-import { ROLES_SCOPES } from "../constants/all_about_models";
-import { HTTP_STATUS } from "../constants/http_status";
+import { TagController } from "../controllers/tag.controller";
 
 const router = require("express").Router();
-
-// GET /api/tags
 
 router.get(
     "/",
     expressAsyncHandler(async (req, res) => {
-        const tags = await TagModel.find({});
-        if (tags) {
-            res.send(tags);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tags not found" });
-        }
+        return new TagController().getAll(req, res);
     })
 );
 
 router.get(
-    "/tag/:id",
+    "/tag/byId/:id",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.findById(req.params.id);
-        if (tag) {
-            res.send(tag);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
-        }
+        return new TagController().getById(req, res);
     })
 );
 
 router.get(
-    "/tag/:name",
+    "/tag/byName/:name",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.findOne({ name: req.params.name });
-        if (tag) {
-            res.send(tag);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
-        }
+        return new TagController().getByName(req, res);
     })
 );
 
 router.get(
     "/acceptedRolesScopes/:acceptedRolesScopes",
     expressAsyncHandler(async (req, res) => {
-        const tags = await TagModel.find({ acceptedRolesScopes: req.params.acceptedRolesScopes });
-        if (tags) {
-            res.send(tags);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
-        }
+        return new TagController().getByAcceptedRolesScopes(req, res);
     })
 );
 
 router.get(
     "/search/:searchTerms",
     expressAsyncHandler(async (req, res) => {
-        const searchTerms = req.params.searchTerms;
-        const tags = await TagModel.find({
-            $or: [
-                { name: { $regex: searchTerms, $options: 'i' } }
-            ]
-        });
-        
-        if (tags) {
-            res.send(tags);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tags not found" });
-        }
+        return new TagController().getBySearchTerms(req, res);
     })
 );
 
-// POST /api/tags
+router.get(
+    "/seed",
+    expressAsyncHandler(async (req, res) => {
+        return new TagController().seed(req, res);
+    })
+
+);
+
+router.get(
+    "/seed/:numberOfTags",
+    expressAsyncHandler(async (req, res) => {
+        return new TagController().seed(req, res);
+    })
+);
 
 router.post(
     "/add",
     expressAsyncHandler(async (req, res) => {
-        const tag = new TagModel({
-            name: req.body.name,
-            acceptedRolesScopes: req.body.acceptedRolesScopes || ROLES_SCOPES
-        });
-        const createdTag = await tag.save();
-        if (createdTag)  {
-            res.status(HTTP_STATUS.CREATED).send(createdTag);
-        } else {
-            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating tag" });
-        }
+        return new TagController().add(req, res);
     })
 );
 
-// PUT /api/tags
-
-router.put(
+router.post(
     "/update/:id",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.findById(req.params.id);
-        if (tag) {
-            tag.name = req.body.name || tag.name;
-            tag.acceptedRolesScopes = req.body.acceptedRolesScopes || tag.acceptedRolesScopes;
-            const updatedTag = await tag.save();
-            res.send(updatedTag);
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
-        }
+        return new TagController().update(req, res);
     })
 );
 
-// DELETE /api/tags
-
-router.delete(
+router.get(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {
-        const tag = await TagModel.findById(req.params.id);
-        if (tag) {
-            await tag.deleteOne();
-            res.send({ message: "Tag deleted" });
-        } else {
-            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Tag not found" });
-        }
+        return new TagController().delete(req, res);
     })
 );
+
+router.get(
+    "/deleteAll",
+    expressAsyncHandler(async (req, res) => {
+        return new TagController().deleteAll(req, res);
+    })
+)
 
 export default router;

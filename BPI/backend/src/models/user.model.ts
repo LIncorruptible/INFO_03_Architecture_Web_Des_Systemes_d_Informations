@@ -19,7 +19,7 @@ const userSchema = new Schema<User>({
     email: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    assignedTo: {type: OrganizationModel, required: true, ref: MODELS_NAMES.ORGANIZATION},
+    assignedTo: {type: Schema.Types.ObjectId, required: true, ref: MODELS_NAMES.ORGANIZATION},
     roleScope: { type: String, required: true, enum: ROLES_SCOPES}
 }, {
     toJSON: {

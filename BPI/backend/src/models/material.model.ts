@@ -16,11 +16,11 @@ export interface Material {
 }
 
 const materialSchema = new Schema<Material>({
-    name: { type: String, required: true, unique: true},
-    taggedAs: { type: TagModel, required: true, ref: MODELS_NAMES.TAG},
+    name: { type: String, required: true},
+    taggedAs: { type: Schema.Types.ObjectId, required: true, ref: MODELS_NAMES.TAG},
     imgPath: { type: String, required: true },
     status: { type: String, required: true, enum: MATERIAL_STATUS},
-    assignedTo: { type: UserModel, ref: MODELS_NAMES.USER},
+    assignedTo: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.USER},
     renewalDate: { type: Date, required: true },
     returnDeadline: { type: Date, required: true }
 }, {
