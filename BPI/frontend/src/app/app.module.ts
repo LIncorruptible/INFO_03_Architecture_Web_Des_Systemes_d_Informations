@@ -17,6 +17,7 @@ import { TextInputComponent } from './components/partials/text-input/text-input.
 import { ReactiveFormsModule } from '@angular/forms';
 import { TitleComponent } from './components/partials/title/title.component';
 import { SearchComponent } from './components/partials/search/search.component';
+import { HomeComponent } from './components/pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SearchComponent } from './components/partials/search/search.component';
     TagsComponent,
     TextInputComponent,
     TitleComponent,
-    SearchComponent
+    SearchComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

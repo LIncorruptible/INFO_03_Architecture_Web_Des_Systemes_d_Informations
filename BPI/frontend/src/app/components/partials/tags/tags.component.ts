@@ -13,13 +13,18 @@ export class TagsComponent {
   tags?: { tag: Tag, count: number }[];
 
   constructor(tagService: TagService, materialService: MaterialService) {
-    tagService.getAll().subscribe(
-      (serverTags) => {
-        this.tags = serverTags.map(tag => ({
-          tag,
-          count: materialService.getByTag(tag).length
-        }));
-      }
-    );
+    tagService.getAll().subscribe(serverTags => {
+      
+      this.tags = serverTags.map(tag => {
+        return { tag: tag, count: 0 };
+      });
+
+      this.tags.forEach(tag => {
+        materialService.getByTag(tag.tag).subscribe(materials => {
+          tag.count = materials.length;
+        });
+      });
+
+    });
   }
 }
