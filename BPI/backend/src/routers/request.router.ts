@@ -12,7 +12,7 @@ router.get(
 );
 
 router.get(
-    "/request/:id",
+    "/request/byId/:id",
     expressAsyncHandler(async (req, res) => {
         await requestController.getById(req, res);
     })

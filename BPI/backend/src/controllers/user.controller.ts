@@ -4,6 +4,10 @@ import { User, UserModel } from "../models/user.model";
 import { Response, Request } from "express";
 import { UserSeeder } from "../seeders/user.seeder";
 import { MaterialModel } from "../models/material.model";
+import { SECRET_KEY } from "../configs/config";
+
+import jwt from "jsonwebtoken";
+import bcrypt from 'bcryptjs';
 
 export class UserController {
 
@@ -184,6 +188,70 @@ export class UserController {
         } else {
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Error deleting users" });
         }
+    }
+
+    private generateTokenReponse = (user : User) => {
+        const token = jwt.sign({
+            id: user.id, email:user.email, roleScope: user.roleScope
+        }, SECRET_KEY!,{
+            expiresIn:"30d"
+        });
+
+        return {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            email: user.email,
+            assignedTo: user.assignedTo,
+            roleScope: user.roleScope,
+            token: token
+        };
+    }
+
+    login = async (req: Request, res: Response) => {
+        const {email, password} = req.body;
+        const user = await UserModel.findOne({email});
+
+        if(user && (await bcrypt.compare(password,user.password))) {
+            res.send(this.generateTokenReponse(user));
+        }
+        else{
+            res.status(HTTP_STATUS.BAD_REQUEST).send("Username or password is invalid!");
+        }
+    }
+
+    register = async (req: Request, res: Response) => {
+        const {
+            firstName, 
+            lastName, 
+            username, 
+            email, 
+            assignedTo, 
+            roleScope, 
+            password
+        } = req.body;
+        const user = await UserModel.findOne({email});
+        if(user){
+            res.status(HTTP_STATUS.BAD_REQUEST).send('User is already exist, please login!');
+            return;
+        }
+
+        const encryptedPassword = await bcrypt.hash(password, 10);
+
+        const newUser:User = {
+            id: 'user.id',
+            firstName,
+            lastName,
+            username,
+            email: email.toLowerCase(),
+            assignedTo,
+            roleScope,
+            password: encryptedPassword
+        }
+
+        const dbUser = await UserModel.create(newUser);
+        res.send(this.generateTokenReponse(dbUser));
     }
 
     getRandom = async () => {

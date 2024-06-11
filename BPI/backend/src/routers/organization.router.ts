@@ -11,14 +11,14 @@ router.get(
 );
 
 router.get(
-    "/organization/:id",
+    "/organization/byId/:id",
     expressAsyncHandler(async (req, res) => {
         return new OrganizationController().getById(req, res);
     })
 );
 
 router.get(
-    "/organization/:name",
+    "/organization/byName/:name",
     expressAsyncHandler(async (req, res) => {
         return new OrganizationController().getByName(req, res);
     })

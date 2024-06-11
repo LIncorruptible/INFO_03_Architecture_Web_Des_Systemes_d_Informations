@@ -11,14 +11,14 @@ router.get(
 );
 
 router.get(
-    "/material/:id",
+    "/material/byId/:id",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().getById(req, res);
     })
 );
 
 router.get(
-    "/material/:name",
+    "/material/byName/:name",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().getByName(req, res);
     })
@@ -53,14 +53,14 @@ router.get(
 );
 
 router.get(
-    "/taggedAs/:tag",
+    "/taggedAsOne/:tag",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().getAccordingToTag(req, res);
     })
 );
 
 router.get(
-    "/taggedAs/:tags",
+    "/taggedAsMany/:tags",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().getAccordingToTags(req, res);
     })

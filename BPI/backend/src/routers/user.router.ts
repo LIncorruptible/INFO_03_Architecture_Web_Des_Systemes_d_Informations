@@ -16,21 +16,21 @@ router.get(
 );
 
 router.get(
-    "/user/:id",
+    "/user/byId/:id",
     expressAsyncHandler(async (req, res) => {
         return new UserController().getById(req, res);
     })
 );
 
 router.get(
-    "/user/:username",
+    "/user/byUsername/:username",
     expressAsyncHandler(async (req, res) => {
         return new UserController().getByUsername(req, res);
     })
 );
 
 router.get(
-    "/user/:email",
+    "/user/byEmail/:email",
     expressAsyncHandler(async (req, res) => {
         return new UserController().getByEmail(req, res);
     })
@@ -96,6 +96,20 @@ router.get(
     "/deleteAll",
     expressAsyncHandler(async (req, res) => {
         return new UserController().deleteAll(req, res);
+    })
+);
+
+router.post(
+    "/login",
+    expressAsyncHandler(async (req, res) => {
+        return new UserController().login(req, res);
+    })
+);
+
+router.post(
+    "/register",
+    expressAsyncHandler(async (req, res) => {
+        return new UserController().register(req, res);
     })
 );
 
