@@ -5,6 +5,7 @@ import { ROLES_SCOPES } from "../constants/all_about_models";
 import { OrganizationController } from "../controllers/organization.controller";
 import { Response, Request, request } from "express";
 import { Organization } from "../models/organization.model";
+import bcrypt from 'bcryptjs';
 
 export class UserSeeder {
 
@@ -22,7 +23,7 @@ export class UserSeeder {
             lastName: faker.person.lastName(),
             username: faker.internet.userName(),
             email: faker.internet.email(),
-            password: faker.internet.password(),
+            password: await bcrypt.hash("12345", 10),
             assignedTo: randomOrganization || await new OrganizationSeeder().defOrganization(),
             roleScope: randomRoleScope 
         };
@@ -51,7 +52,7 @@ export class UserSeeder {
             lastName: "Doe",
             username: "johndoe",
             email: "johndoe@email.com",
-            password: "admin",
+            password: await bcrypt.hash("admin", 10),
             assignedTo: randomOrganization,
             roleScope: adminRoleScope[0]
         };

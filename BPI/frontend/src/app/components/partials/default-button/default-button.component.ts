@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { COLORS } from '../../../shared/constants/colors';
 
 @Component({
-  selector: 'app-default-button',
+  selector: 'default-button',
   templateUrl: './default-button.component.html',
   styleUrl: './default-button.component.css'
 })

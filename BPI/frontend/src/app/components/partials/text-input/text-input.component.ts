@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-text-input',
+  selector: 'text-input',
   templateUrl: './text-input.component.html',
   styleUrl: './text-input.component.css'
 })

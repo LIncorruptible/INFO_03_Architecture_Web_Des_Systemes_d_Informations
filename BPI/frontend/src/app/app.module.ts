@@ -18,6 +18,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TitleComponent } from './components/partials/title/title.component';
 import { SearchComponent } from './components/partials/search/search.component';
 import { HomeComponent } from './components/pages/home/home.component';
+import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
+import { LoginPageComponent } from './components/pages/login-page/login-page.component';
+import { SelectInputComponent } from './components/partials/select-input/select-input.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { HomeComponent } from './components/pages/home/home.component';
     TextInputComponent,
     TitleComponent,
     SearchComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterPageComponent,
+    LoginPageComponent,
+    SelectInputComponent
   ],
   imports: [
     BrowserModule,

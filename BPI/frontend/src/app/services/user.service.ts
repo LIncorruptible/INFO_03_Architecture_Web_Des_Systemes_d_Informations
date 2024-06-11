@@ -40,7 +40,12 @@ export class UserService {
         return this.userSubject.value;
     }
 
+    getAll = () : Observable<User[]> => {
+        return this.http.get<User[]>(URLS.USERS.BASE);
+    }
+
     login = (userLogin: IUserLogin) : Observable<User> => {
+        console.log('Login user', userLogin);
         return this.http.post<User>(
             URLS.USERS.LOGIN,
             userLogin  
@@ -70,7 +75,6 @@ export class UserService {
     }
 
     register = (userRegister: IUserRegister): Observable<User> => {
-        userRegister.roleScope = "user";
         return this.http.post<User>(
             URLS.USERS.REGISTER,
             userRegister

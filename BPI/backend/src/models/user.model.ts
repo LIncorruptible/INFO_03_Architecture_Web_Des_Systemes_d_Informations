@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Organization, OrganizationModel } from "./organization.model";
+import { Organization } from "./organization.model";
 
 import { ROLES_SCOPES, MODELS_NAMES } from "../constants/all_about_models";
 
@@ -19,6 +19,7 @@ const userSchema = new Schema<User>({
     email: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    password: { type: String, required: true},
     assignedTo: {type: Schema.Types.ObjectId, required: true, ref: MODELS_NAMES.ORGANIZATION},
     roleScope: { type: String, required: true, enum: ROLES_SCOPES}
 }, {

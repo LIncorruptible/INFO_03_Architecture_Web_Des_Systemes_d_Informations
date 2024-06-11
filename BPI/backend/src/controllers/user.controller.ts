@@ -8,6 +8,7 @@ import { SECRET_KEY } from "../configs/config";
 
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
 
 export class UserController {
 
@@ -209,15 +210,19 @@ export class UserController {
         };
     }
 
-    login = async (req: Request, res: Response) => {
+    login = async (req: any, res: any) => {
         const {email, password} = req.body;
-        const user = await UserModel.findOne({email});
 
-        if(user && (await bcrypt.compare(password,user.password))) {
-            res.send(this.generateTokenReponse(user));
-        }
-        else{
-            res.status(HTTP_STATUS.BAD_REQUEST).send("Username or password is invalid!");
+        const user = await UserModel.findOne({email: email});
+
+        if (user) {
+            if (await bcrypt.compare(password, user.password)) {
+                res.send(this.generateTokenReponse(user));
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).send('Invalid password');
+            }
+        } else {
+            res.status(HTTP_STATUS.BAD_REQUEST).send('User not found');
         }
     }
 
@@ -227,11 +232,12 @@ export class UserController {
             lastName, 
             username, 
             email, 
+            password,
             assignedTo, 
             roleScope, 
-            password
         } = req.body;
-        const user = await UserModel.findOne({email});
+
+        const user = await UserModel.findOne({email: email});
         if(user){
             res.status(HTTP_STATUS.BAD_REQUEST).send('User is already exist, please login!');
             return;
@@ -240,15 +246,17 @@ export class UserController {
         const encryptedPassword = await bcrypt.hash(password, 10);
 
         const newUser:User = {
-            id: 'user.id',
+            id:'',
             firstName,
             lastName,
             username,
             email: email.toLowerCase(),
+            password: encryptedPassword,
             assignedTo,
-            roleScope,
-            password: encryptedPassword
+            roleScope
         }
+
+        console.log("Utilisateur en cours de création : ", JSON.stringify(newUser));
 
         const dbUser = await UserModel.create(newUser);
         res.send(this.generateTokenReponse(dbUser));

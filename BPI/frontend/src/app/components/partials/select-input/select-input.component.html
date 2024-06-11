@@ -1,0 +1,9 @@
+<input-container [label]="label">
+    <select [formControl]="formControl">
+        <option value="" disabled selected>Select {{ label }}</option>
+        <option *ngFor="let object of selectObjectsList" [value]="object[keyValue]">
+            {{ object[viewValue] }}
+        </option>
+    </select>
+    <input-validation [control]="control" [showErrorsWhen]="showErrorsWhen"> </input-validation>
+</input-container>

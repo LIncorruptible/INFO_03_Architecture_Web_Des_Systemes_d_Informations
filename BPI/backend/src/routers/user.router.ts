@@ -5,6 +5,7 @@ import { OrganizationModel } from "../models/organization.model";
 
 import { HTTP_STATUS } from "../constants/http_status";
 import { UserController } from "../controllers/user.controller";
+import { verifyAndConvertOrganization } from "../middleware/organization.middleware";
 
 const router = require("express").Router();
 
@@ -108,6 +109,7 @@ router.post(
 
 router.post(
     "/register",
+    verifyAndConvertOrganization,
     expressAsyncHandler(async (req, res) => {
         return new UserController().register(req, res);
     })
