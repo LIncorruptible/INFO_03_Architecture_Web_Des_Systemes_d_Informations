@@ -1,0 +1,29 @@
+.container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #384454;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+}
+
+.details {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 80%;
+    width: 100%;
+}
+
+img {
+    border-bottom: 10px solid #317AC1;
+    width: 200px;
+    height: 200px;
+}
+
+h3 {
+    color: #D4D3DC;
+    text-transform: lowercase;
+}

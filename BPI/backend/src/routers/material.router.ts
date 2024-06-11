@@ -75,6 +75,13 @@ router.get(
 );
 
 router.get(
+    "/organization/:organization",
+    expressAsyncHandler(async (req, res) => {
+        return new MaterialController().getAccordingToOrganization(req, res);
+    })
+);
+
+router.get(
     "/seed",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().seed(req, res);

@@ -3,7 +3,7 @@ import { User } from '../shared/models/User';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr/toastr/toastr.service';
+import { ToastrService } from 'ngx-toastr';
 import { IUserLogin } from '../shared/interface/IUserLogin';
 import { URLS } from '../shared/constants/urls';
 import { IUserRegister } from '../shared/interface/IUserRegister';

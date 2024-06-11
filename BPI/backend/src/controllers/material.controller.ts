@@ -2,6 +2,8 @@ import { HTTP_STATUS } from "../constants/http_status";
 import { MaterialModel } from "../models/material.model";
 import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
+import { UserController } from "./user.controller";
+import { User } from "../models/user.model";
 
 export class MaterialController {
     constructor() {}
@@ -99,6 +101,16 @@ export class MaterialController {
     getAccordingToUser = async (req: Request, res: Response) => {
         const targetUser = req.params.user;
         const materials = await MaterialModel.find({ user: targetUser });
+        if (materials) {
+            res.send(materials);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Materials not found" });
+        }
+    }
+
+    getAccordingToOrganization = async (req: Request, res: Response) => {
+        const users = await new UserController().getAccordingToOrganization(req, res);
+        const materials = await MaterialModel.find({ user: { $in: users } });
         if (materials) {
             res.send(materials);
         } else {

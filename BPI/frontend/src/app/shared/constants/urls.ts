@@ -45,6 +45,7 @@ export const URLS = {
         BY_TAG: `${BASE_URL}/api/materials/taggedAsOne/`,
         BY_TAGS: `${BASE_URL}/api/materials/taggedAsMany/`,
         BY_USER: `${BASE_URL}/api/materials/assignedTo/`,
+        BY_ORGANIZATION: `${BASE_URL}/api/materials/organization/`,
         ADD: `${BASE_URL}/api/materials/add`,
         UPDATE: `${BASE_URL}/api/materials/update/`,
         DELETE: `${BASE_URL}/api/materials/delete/`
