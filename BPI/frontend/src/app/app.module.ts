@@ -21,6 +21,7 @@ import { HomeComponent } from './components/pages/home/home.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { SelectInputComponent } from './components/partials/select-input/select-input.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SelectInputComponent } from './components/partials/select-input/select-
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,

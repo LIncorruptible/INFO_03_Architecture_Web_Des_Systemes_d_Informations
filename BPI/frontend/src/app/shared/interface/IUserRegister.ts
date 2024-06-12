@@ -7,6 +7,6 @@ export interface IUserRegister {
     email: string;
     password: string;
     confirmedPassword: string;
-    assignedTo: string;
+    assignedTo: Organization;
     roleScope: string;
 }

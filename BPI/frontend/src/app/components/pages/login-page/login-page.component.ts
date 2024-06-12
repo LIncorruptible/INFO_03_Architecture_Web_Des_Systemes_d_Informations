@@ -35,6 +35,7 @@ export class LoginPageComponent {
 
   submit() {
     this.isSubmitted = true;
+    
     if(this.loginForm.invalid) return;
 
     this.userService.login(

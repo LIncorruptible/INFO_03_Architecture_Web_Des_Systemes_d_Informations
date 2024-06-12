@@ -58,7 +58,7 @@ export class RegisterPageComponent {
       confirmedPassword: ['', [
         Validators.required
       ]],
-      assignedTo: ['', [
+      assignedTo: [null, [
         Validators.required
       ]]
     }, {
@@ -79,6 +79,8 @@ export class RegisterPageComponent {
       return;
     }
 
+    console.log(this.registerForm.value.assignedTo.id);
+
     const fv = this.registerForm.value;
 
     const user: IUserRegister = {
@@ -92,10 +94,8 @@ export class RegisterPageComponent {
       roleScope: 'user'
     };
 
-    console.log("Organisation sélectionnée : ", JSON.stringify(user.assignedTo));
-
     this.userService.register(user).subscribe(_ => {
-      this.router.navigate([this.returnUrl]);
+      this.router.navigateByUrl(this.returnUrl);
     });
   }
   

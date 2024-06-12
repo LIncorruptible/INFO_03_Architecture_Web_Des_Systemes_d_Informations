@@ -1,7 +1,7 @@
 <input-container [label]="label">
-    <select [formControl]="formControl">
-        <option value="" disabled selected>Select {{ label }}</option>
-        <option *ngFor="let object of selectObjectsList" [value]="object[keyValue]">
+    <select [formControl]="formControl" [(ngModel)]="nrSelect">
+        <option value="" disabled>Select {{ label }}</option>
+        <option *ngFor="let object of selectObjectsList" [ngValue]="object">
             {{ object[viewValue] }}
         </option>
     </select>

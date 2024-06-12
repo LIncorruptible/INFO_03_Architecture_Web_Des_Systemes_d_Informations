@@ -17,8 +17,9 @@ export class SelectInputComponent implements OnInit {
   @Input() label!: string;
   @Input() typeObj: 'user' | 'material' | 'organization' | 'tag' | 'any' = 'any';
   @Input() viewValue: string = 'Nothing to show';
-  @Input() keyValue: string = 'id';
 
+  nrSelect='';
+  
   selectObjectsList: any[] = [];
 
   constructor(

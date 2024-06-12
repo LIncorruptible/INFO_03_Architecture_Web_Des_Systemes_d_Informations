@@ -103,7 +103,7 @@ router.get(
 router.post(
     "/login",
     expressAsyncHandler(async (req, res) => {
-        return new UserController().login(req, res);
+        new UserController().login(req, res);
     })
 );
 

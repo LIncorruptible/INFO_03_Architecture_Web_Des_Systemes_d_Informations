@@ -45,7 +45,6 @@ export class UserService {
     }
 
     login = (userLogin: IUserLogin) : Observable<User> => {
-        console.log('Login user', userLogin);
         return this.http.post<User>(
             URLS.USERS.LOGIN,
             userLogin  

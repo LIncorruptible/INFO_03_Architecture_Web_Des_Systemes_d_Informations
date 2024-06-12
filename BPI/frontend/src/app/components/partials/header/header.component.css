@@ -51,9 +51,12 @@ a span {
 
 .menu {
     position: absolute;
+    right: 0;
     z-index: 1;
     background: whitesmoke;
     display: none;
+    transform: translateX(0%);
+    white-space: nowrap; /* Prevent menu items from wrapping */
 }
 
 .menu-container:hover .menu {
@@ -61,6 +64,8 @@ a span {
 }
 
 .menu a {
-    width: 100%;
-    min-width: 8rem;
+    display: block;
+    padding: 1rem;
+    text-align: left;
+    white-space: nowrap; /* Prevent menu items from wrapping */
 }
