@@ -22,6 +22,10 @@ import { RegisterPageComponent } from './components/pages/register-page/register
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { SelectInputComponent } from './components/partials/select-input/select-input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserHomeComponent } from './components/partials/user-home/user-home.component';
+import { OrganizationHomeComponent } from './components/partials/organization-home/organization-home.component';
+import { AdminHomeComponent } from './components/partials/admin-home/admin-home.component';
+import { GuestHomeComponent } from './components/partials/guest-home/guest-home.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     RegisterPageComponent,
     LoginPageComponent,
-    SelectInputComponent
+    SelectInputComponent,
+    UserHomeComponent,
+    OrganizationHomeComponent,
+    AdminHomeComponent,
+    GuestHomeComponent
   ],
   imports: [
     BrowserModule,

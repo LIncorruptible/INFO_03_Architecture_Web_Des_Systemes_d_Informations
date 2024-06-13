@@ -1,6 +1,9 @@
 <header>
     <div class="container">
-        <a routerLink="/" class="logo">BPI</a>
+        <a routerLink="/" class="logo-container">
+            <img src='assets/inventory.png' alt="Logo" class="logo-image">
+            <span class="logo-text">BPI</span>
+        </a>
         <nav>
             <ul>
                 <li *ngIf="!isAuth">

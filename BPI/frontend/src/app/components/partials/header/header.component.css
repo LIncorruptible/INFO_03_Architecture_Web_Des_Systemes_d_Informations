@@ -19,17 +19,32 @@ a:hover {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
-a.logo {
+.logo-container {
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+    background-color: #384454;
+}
+
+.logo-image {
+    height: 50px;
+    /* margin-right: 10px; */
+}
+
+.logo-text {
     font-weight: bold;
     padding: 1rem;
+    display: inline-block;
 }
 
 ul {
     display: flex;
     list-style-type: none;
     margin: 0;
+    padding: 0;
 }
 
 ul a {
@@ -38,11 +53,11 @@ ul a {
 }
 
 a span {
-    background: #384454;
+    /* background: #384454; */
     color: white;
-    padding: 0.1rem 0.45rem;
-    border-radius: 100rem;
-    font-size: 0.9rem;
+    /* padding: 0.1rem 0.45rem;
+    border-radius: 100rem; */
+    font-size: 1rem;
 }
 
 .menu-container {
@@ -56,7 +71,7 @@ a span {
     background: whitesmoke;
     display: none;
     transform: translateX(0%);
-    white-space: nowrap; /* Prevent menu items from wrapping */
+    white-space: nowrap;
 }
 
 .menu-container:hover .menu {
@@ -67,5 +82,5 @@ a span {
     display: block;
     padding: 1rem;
     text-align: left;
-    white-space: nowrap; /* Prevent menu items from wrapping */
+    white-space: nowrap;
 }

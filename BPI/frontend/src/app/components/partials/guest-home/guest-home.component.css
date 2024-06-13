@@ -1,0 +1,34 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 3rem;
+}
+
+.home {
+    width: 28rem;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+default-button {
+    display: block;
+    margin: 1rem auto;
+}
+
+a {
+    color: #317AC1;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

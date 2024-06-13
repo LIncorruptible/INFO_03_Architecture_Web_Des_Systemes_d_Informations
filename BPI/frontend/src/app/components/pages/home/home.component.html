@@ -1,1 +1,11 @@
-<p>home works!</p>
+<div class="container">
+    <div *ngIf="isAuth" class="home">
+        <admin-home *ngIf="isAdmin"></admin-home>
+        <organization-home *ngIf="isOrganization"></organization-home>
+        <user-home *ngIf="isUser"></user-home>
+    </div>
+
+    <div *ngIf="!isAuth" class="home">
+        <guest-home></guest-home>
+    </div>
+</div>
