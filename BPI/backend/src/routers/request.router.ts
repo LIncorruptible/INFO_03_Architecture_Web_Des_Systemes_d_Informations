@@ -74,6 +74,27 @@ router.post(
     })
 );
 
+router.post(
+    "/approve/:id",
+    expressAsyncHandler(async (req, res) => {
+        await requestController.approve(req, res);
+    })
+);
+
+router.get(
+    "/approve/:id",
+    expressAsyncHandler(async (req, res) => {
+        await requestController.approve(req, res);
+    })
+);
+
+router.post(
+    "/reject/:id",
+    expressAsyncHandler(async (req, res) => {
+        await requestController.reject(req, res);
+    })
+);
+
 router.get(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {

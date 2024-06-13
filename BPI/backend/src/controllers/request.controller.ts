@@ -4,6 +4,12 @@ import { Response, Request } from "express";
 import { RequestSeeder } from "../seeders/request.seeder";
 
 import { Request as CustomRequest } from "../models/request.model";
+import { MaterialController } from "./material.controller";
+import { REQUEST_STATUS } from "../constants/all_about_models";
+
+const PENDING = REQUEST_STATUS[0];
+const APPROVED = REQUEST_STATUS[1];
+const DECLINED = REQUEST_STATUS[2];
 
 export class RequestController {
 
@@ -118,8 +124,8 @@ export class RequestController {
             requester,
             material,
             type,
-            status,
-            date
+            status: PENDING,
+            date: new Date().getDate()
         });
 
         if (await this.isAlreadyExists(request)) {
@@ -155,6 +161,40 @@ export class RequestController {
                 res.send(updatedRequest);
             } else {
                 res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating request" });
+            }
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Request not found" });
+        }
+    }
+
+    approve = async (req: Request, res: Response) => {
+        const request = await RequestModel.findById(req.params.id);
+        if (request) {
+            request.status = APPROVED;
+            const updatedRequest = await request.save();
+            if (updatedRequest) {
+                req.body = { user: request.requester };
+                new MaterialController().allocate(req, res);
+                res.send(updatedRequest);
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error approving request" });
+            }
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Request not found" });
+        }
+    }
+
+    reject = async (req: Request, res: Response) => {
+        const request = await RequestModel.findById(req.params.id);
+        if (request) {
+            request.status = DECLINED;
+            const updatedRequest = await request.save();
+            if (updatedRequest) {
+                req.params.id = request.material.id;
+                new MaterialController().refund(req, res);
+                res.send(updatedRequest);
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error declining request" });
             }
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Request not found" });

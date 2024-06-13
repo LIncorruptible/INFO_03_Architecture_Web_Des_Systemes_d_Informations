@@ -109,6 +109,20 @@ router.post(
     })
 );
 
+router.post(
+    "/allocate/:id",
+    expressAsyncHandler(async (req, res) => {
+        return new MaterialController().allocate(req, res);
+    })
+);
+
+router.post(
+    "/refund/:id",
+    expressAsyncHandler(async (req, res) => {
+        return new MaterialController().refund(req, res);
+    })
+);
+
 router.get(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {

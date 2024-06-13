@@ -4,6 +4,10 @@ import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
 import { UserController } from "./user.controller";
 import { User } from "../models/user.model";
+import { MATERIAL_STATUS } from "../constants/all_about_models";
+
+const STOCKED = MATERIAL_STATUS[0];
+const USED = MATERIAL_STATUS[1];
 
 export class MaterialController {
     constructor() {}
@@ -169,6 +173,41 @@ export class MaterialController {
 
             const updatedMaterial = await material.save();
             res.send(updatedMaterial);
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Material not found" });
+        }
+    }
+
+    allocate = async (req: Request, res: Response) => {
+        const { user } = req.body;
+        const material = await MaterialModel.findById(req.params.id);
+        if (material) {
+            material.assignedTo = user;
+            material.status = USED;
+            const updatedMaterial = await material.save();
+
+            if (updatedMaterial) {
+                res.send(updatedMaterial);
+            } else {
+                res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Failed to update material" });
+            }
+        } else {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Material not found" });
+        }
+    }
+
+    refund = async (req: Request, res: Response) => {
+        const material = await MaterialModel.findById(req.params.id);
+        if (material) {
+            material.assignedTo = null as any;
+            material.status = STOCKED;
+            const updatedMaterial = await material.save();
+
+            if (updatedMaterial) {
+                res.send(updatedMaterial);
+            } else {
+                res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Failed to update material" });
+            }
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Material not found" });
         }
