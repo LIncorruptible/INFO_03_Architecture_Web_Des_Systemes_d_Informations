@@ -8,16 +8,32 @@
 
 .details {
     width: 28rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+
+form > * {
+    margin-bottom: 1.5rem;
 }
 
 .register {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.register a {
+    color: #317AC1;
+    text-decoration: none;
+}
+
+.register a:hover {
+    text-decoration: underline;
 }

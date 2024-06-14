@@ -1,27 +1,27 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 3rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 1rem;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .home {
-    width: 28rem;
     text-align: center;
 }
 
 h1 {
-    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #317AC1;
 }
 
 p {
+    font-size: 1.2rem;
+    color: #555;
     margin-bottom: 1rem;
-}
-
-default-button {
-    display: block;
-    margin: 1rem auto;
 }
 
 a {
@@ -31,4 +31,8 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.default-button {
+    margin-top: 1rem;
 }

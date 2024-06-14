@@ -26,6 +26,8 @@ import { UserHomeComponent } from './components/partials/user-home/user-home.com
 import { OrganizationHomeComponent } from './components/partials/organization-home/organization-home.component';
 import { AdminHomeComponent } from './components/partials/admin-home/admin-home.component';
 import { GuestHomeComponent } from './components/partials/guest-home/guest-home.component';
+import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
+import { MaterialTableComponent } from './components/partials/material-table/material-table.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { GuestHomeComponent } from './components/partials/guest-home/guest-home.
     UserHomeComponent,
     OrganizationHomeComponent,
     AdminHomeComponent,
-    GuestHomeComponent
+    GuestHomeComponent,
+    InventoryPageComponent,
+    MaterialTableComponent,
   ],
   imports: [
     BrowserModule,

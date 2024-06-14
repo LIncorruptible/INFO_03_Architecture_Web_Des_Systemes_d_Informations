@@ -11,6 +11,7 @@ export interface Material {
     taggedAs: Tag;
     status: string;
     assignedTo: User;
+    forOrganization: boolean;
     renewalDate: Date;
     returnDeadline: Date;
 }
@@ -21,6 +22,7 @@ const materialSchema = new Schema<Material>({
     imgPath: { type: String, required: true },
     status: { type: String, required: true, enum: MATERIAL_STATUS},
     assignedTo: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.USER},
+    forOrganization: { type: Boolean, required: true },
     renewalDate: { type: Date, required: true },
     returnDeadline: { type: Date, required: true }
 }, {

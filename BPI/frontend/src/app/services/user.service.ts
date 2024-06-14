@@ -69,7 +69,7 @@ export class UserService {
         if(typeof window !== 'undefined') {
             this.userSubject.next(new User());
             localStorage.removeItem(USER_KEY);
-            window.location.reload();
+            this.toastrService.success('Logout successful');
         }
     }
 

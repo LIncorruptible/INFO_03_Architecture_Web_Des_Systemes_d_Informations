@@ -95,6 +95,14 @@ router.get(
     })
 );
 
+router.get(
+    "/seed/:userEmail/:numberOfMaterials",
+    expressAsyncHandler(async (req, res) => {
+        return new MaterialController().seedForUser(req, res);
+    })
+);
+
+
 router.post(
     "/add",
     expressAsyncHandler(async (req, res) => {

@@ -6,6 +6,10 @@ import { UserController } from "../controllers/user.controller";
 import { TagController } from "../controllers/tag.controller";
 import { TagModel } from "../models/tag.model";
 import { MATERIAL_STATUS } from "../constants/all_about_models";
+import { User, UserModel } from "../models/user.model";
+
+const STOCKED = MATERIAL_STATUS[0];
+const USED = MATERIAL_STATUS[1];
 
 export class MaterialSeeder {
     async defMaterial(): Promise<Material> {
@@ -21,6 +25,7 @@ export class MaterialSeeder {
             taggedAs: randomTag || await new TagSeeder().defTag(),
             status: randomStatus,
             assignedTo: randomUser || await new UserSeeder().defUser(),
+            forOrganization: Math.random() < 0.5,
             renewalDate: faker.date.future(),
             returnDeadline: faker.date.future()
         };
@@ -33,6 +38,21 @@ export class MaterialSeeder {
         for (let i = 0; i < amount; i++) {
             materials.push(await this.defMaterial());
         }
+        return materials;
+    }
+
+    async defMaterialsForUser(userEmail: string, amount: number): Promise<Material[]> {
+        const materials: Material[] = [];
+
+        const user = await UserModel.findOne({ email: userEmail }) as User;
+
+        for (let i = 0; i < amount; i++) {
+            const material = await this.defMaterial();
+            material.assignedTo = user;
+            material.status = USED;
+            materials.push(material);
+        }
+
         return materials;
     }
 
@@ -100,6 +120,7 @@ export class MaterialSeeder {
                     taggedAs: tag,
                     status: MATERIAL_STATUS[Math.floor(Math.random() * MATERIAL_STATUS.length)],
                     assignedTo: randomUser,
+                    forOrganization: Math.random() < 0.5,
                     renewalDate: faker.date.future(),
                     returnDeadline: faker.date.future()
                 };

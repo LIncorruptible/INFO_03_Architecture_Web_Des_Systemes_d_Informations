@@ -3,7 +3,7 @@ import { MaterialModel } from "../models/material.model";
 import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
 import { UserController } from "./user.controller";
-import { User } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 import { MATERIAL_STATUS } from "../constants/all_about_models";
 
 const STOCKED = MATERIAL_STATUS[0];
@@ -83,7 +83,7 @@ export class MaterialController {
     }
 
     getAccordingToTag = async (req: Request, res: Response) => {
-        const targetTag = req.params.tag;
+        const targetTag = req.body.tag;
         const materials = await MaterialModel.find({ taggedAs: targetTag });
         if (materials) {
             res.send(materials);
@@ -93,7 +93,7 @@ export class MaterialController {
     }
 
     getAccordingToTags = async (req: Request, res: Response) => {
-        const tags = req.params.tags;
+        const tags = req.body.tags;
         const materials = await MaterialModel.find({ taggedAs: { $in: tags } });
         if (materials) {
             res.send(materials);
@@ -103,7 +103,7 @@ export class MaterialController {
     }
 
     getAccordingToUser = async (req: Request, res: Response) => {
-        const targetUser = req.params.user;
+        const targetUser = req.body.user;
         const materials = await MaterialModel.find({ user: targetUser });
         if (materials) {
             res.send(materials);
@@ -113,7 +113,8 @@ export class MaterialController {
     }
 
     getAccordingToOrganization = async (req: Request, res: Response) => {
-        const users = await new UserController().getAccordingToOrganization(req, res);
+        const organization = req.body.organization;
+        const users = await UserModel.find({ assignedTo: organization });
         const materials = await MaterialModel.find({ user: { $in: users } });
         if (materials) {
             res.send(materials);
@@ -137,6 +138,23 @@ export class MaterialController {
             res.status(HTTP_STATUS.CREATED).send(materials);
         } else {
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send({ message: "Failed to seed materials" });
+        }
+    }
+
+    seedForUser = async (req: Request, res: Response) => {
+        const userEmail = req.params.userEmail;
+        const numberOfMaterials = Number(req.params.numberOfMaterials);
+        const user = await UserModel.findOne({ email: userEmail });
+        if (!user) {
+            res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
+            return;
+        }
+        const materials = await MaterialModel.insertMany(await new MaterialSeeder().defMaterialsForUser(userEmail, numberOfMaterials));
+        
+        if (materials) {
+            res.status(HTTP_STATUS.CREATED).send(materials);
+        } else {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error seeding materials" });
         }
     }
 

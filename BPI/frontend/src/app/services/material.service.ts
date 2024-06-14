@@ -7,13 +7,25 @@ import { User } from '../shared/models/User';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
 import { Organization } from '../shared/models/Organization';
+import { ROLES_SCOPES } from '../shared/constants/all_about_models';
+
+const ADMIN = ROLES_SCOPES[0];
+const ORGANIZATION = ROLES_SCOPES[1];
+const USER = ROLES_SCOPES[2];
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
 
-  constructor(private http:HttpClient, private userService: UserService) { }
+  materialsObservable: Observable<Material[]> = new Observable<Material[]>();
+
+  constructor(private http:HttpClient, private userService: UserService) {    
+    this.materialsObservable = this.getAccordingToCurrentUser();
+
+    this.materialsObservable.subscribe((newMaterials) => {
+    });
+   }
 
   getAll(): Observable<Material[]> {
     return this.http.get<Material[]>(URLS.MATERIALS.BASE);
@@ -36,11 +48,11 @@ export class MaterialService {
   }
 
   getAccordingToCurrentUser(): Observable<Material[]> {
-    const currentUser = this.userService.currentUser();
+    const currentUser: User = this.userService.currentUser();
 
-    if (currentUser.roleScope === "admin") 
+    if (currentUser.roleScope === ADMIN) 
       return this.getAll();
-    else if (currentUser.roleScope === "organization") 
+    else if (currentUser.roleScope === ORGANIZATION) 
       return this.getByOrganization(currentUser.assignedTo);
     else 
       return this.getByUser(currentUser);

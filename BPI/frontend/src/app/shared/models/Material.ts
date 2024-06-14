@@ -8,6 +8,7 @@ export class Material {
     taggedAs!: Tag;
     status!: string;
     assignedTo!: User;
+    forOrganization!: boolean;
     renewalDate!: Date;
     returnDeadline!: Date;
 }

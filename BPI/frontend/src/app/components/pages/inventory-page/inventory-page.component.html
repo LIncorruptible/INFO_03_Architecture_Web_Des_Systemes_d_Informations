@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="details">
+        <material-table *ngIf="materials && materials.length > 0"></material-table>
+        <not-found *ngIf="!isAdmin"
+        [visible]="!materials || materials.length === 0"
+        notFoundMessage="No materials found"
+        resetLinkText="Request a material"
+        ></not-found>
+    </div>
+</div>

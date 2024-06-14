@@ -9,6 +9,7 @@ import { SECRET_KEY } from "../configs/config";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
 import mongoose from "mongoose";
+import { MaterialSeeder } from "../seeders/material.seeder";
 
 export class UserController {
 
