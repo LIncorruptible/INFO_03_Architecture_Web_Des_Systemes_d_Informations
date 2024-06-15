@@ -21,7 +21,6 @@ export class MaterialSeeder {
         const material: Material = {
             id: faker.string.uuid(),
             name: faker.lorem.word(),
-            imgPath: faker.image.url(),
             taggedAs: randomTag || await new TagSeeder().defTag(),
             status: randomStatus,
             assignedTo: randomUser || await new UserSeeder().defUser(),
@@ -116,7 +115,6 @@ export class MaterialSeeder {
                 const material: Material = {
                     id: faker.string.uuid(),
                     name: tagItems[j],
-                    imgPath: faker.image.url(),
                     taggedAs: tag,
                     status: MATERIAL_STATUS[Math.floor(Math.random() * MATERIAL_STATUS.length)],
                     assignedTo: randomUser,

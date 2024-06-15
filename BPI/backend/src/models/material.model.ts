@@ -7,7 +7,6 @@ import { User, UserModel } from "./user.model";
 export interface Material {
     id: string;
     name: string;
-    imgPath: string;
     taggedAs: Tag;
     status: string;
     assignedTo: User;
@@ -19,7 +18,6 @@ export interface Material {
 const materialSchema = new Schema<Material>({
     name: { type: String, required: true},
     taggedAs: { type: Schema.Types.ObjectId, required: true, ref: MODELS_NAMES.TAG},
-    imgPath: { type: String, required: true },
     status: { type: String, required: true, enum: MATERIAL_STATUS},
     assignedTo: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.USER},
     forOrganization: { type: Boolean, required: true },

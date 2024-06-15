@@ -35,7 +35,6 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let material of materials" (click)="onMaterialSelect(material)">
-                        <td><img [src]="material.imgPath" alt="Image du matériel"></td>
                         <td>{{ material.name }}</td>
                         <td>{{ material.taggedAs.name }}</td>
                         

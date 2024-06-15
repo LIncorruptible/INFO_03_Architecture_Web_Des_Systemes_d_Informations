@@ -159,10 +159,9 @@ export class MaterialController {
     }
 
     add = async (req: Request, res: Response) => {
-        const { name, imgPath, taggedAs, status, assignedTo, renewalDate, returnDeadline } = req.body;
+        const { name, taggedAs, status, assignedTo, renewalDate, returnDeadline } = req.body;
         const material = new MaterialModel({
             name,
-            imgPath,
             taggedAs,
             status,
             assignedTo,
@@ -182,7 +181,6 @@ export class MaterialController {
         const material = await MaterialModel.findById(materialId);
         if (material) {
             material.name = req.body.name || material.name;
-            material.imgPath = req.body.imgPath || material.imgPath;
             material.taggedAs = req.body.taggedAs || material.taggedAs;
             material.status = req.body.status || material.status;
             material.assignedTo = req.body.assignedTo || material.assignedTo;
