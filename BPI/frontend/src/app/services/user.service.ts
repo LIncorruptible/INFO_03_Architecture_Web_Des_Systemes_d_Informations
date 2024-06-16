@@ -44,6 +44,10 @@ export class UserService {
         return this.http.get<User[]>(URLS.USERS.BASE);
     }
 
+    getById = (id: string) : Observable<User> => {
+        return this.http.get<User>(URLS.USERS.BY_ID + id);
+    }
+
     login = (userLogin: IUserLogin) : Observable<User> => {
         return this.http.post<User>(
             URLS.USERS.LOGIN,

@@ -48,7 +48,9 @@ export const URLS = {
         BY_ORGANIZATION: `${BASE_URL}/api/materials/organization/`,
         ADD: `${BASE_URL}/api/materials/add`,
         UPDATE: `${BASE_URL}/api/materials/update/`,
-        DELETE: `${BASE_URL}/api/materials/delete/`
+        DELETE: `${BASE_URL}/api/materials/delete/`,
+        ASSIGN: `${BASE_URL}/api/materials/assign/`,
+        REFUND: `${BASE_URL}/api/materials/refund/`
     },
     REQUESTS: {
         BASE: `${BASE_URL}/api/requests`,

@@ -9,9 +9,17 @@ import { Tag } from '../shared/models/Tag';
 })
 export class TagService {
 
-  constructor(private http:HttpClient) { }
+  tagsObservable: Observable<Tag[]> = new Observable<Tag[]>();
+
+  constructor(private http:HttpClient) {
+    this.tagsObservable = this.getAll();
+   }
 
   getAll(): Observable<Tag[]> {
     return this.http.get<Tag[]>(URLS.TAGS.BASE);
+  }
+
+  getById(id: string): Observable<Tag> {
+    return this.http.get<Tag>(URLS.TAGS.BY_ID + id);
   }
 }

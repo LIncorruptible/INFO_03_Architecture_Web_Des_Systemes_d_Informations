@@ -10,9 +10,9 @@ a {
 }
 
 a:hover {
-   background: #317AC1;
-   color: white;
-   cursor: pointer;
+    background: #317AC1;
+    color: white;
+    cursor: pointer;
 }
 
 nav a:hover {
@@ -40,8 +40,10 @@ nav a:hover {
 
 .logo-text {
     font-weight: bold;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     display: inline-block;
+    margin-right: 0.5rem;
+    color: white;
 }
 
 nav.left-nav {
@@ -87,5 +89,4 @@ a span {
     color: #384454;
     display: flex;
     align-items: center;
-
 }

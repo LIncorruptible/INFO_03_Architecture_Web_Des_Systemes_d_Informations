@@ -1,14 +1,21 @@
 .container {
-    margin: 2rem auto;
-    max-width: 600px;
-    padding: 1rem;
-    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    margin-top: 20px;
+    height: 100vh;
+}
+
+.card {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.home {
+.text-center {
     text-align: center;
 }
 
@@ -31,8 +38,4 @@ a {
 
 a:hover {
     text-decoration: underline;
-}
-
-.default-button {
-    margin-top: 1rem;
 }

@@ -71,7 +71,6 @@ router.get(
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().getAccordingToUser(req, res);
     })
-
 );
 
 router.get(
@@ -118,9 +117,9 @@ router.post(
 );
 
 router.post(
-    "/allocate/:id",
+    "/assign/:id",
     expressAsyncHandler(async (req, res) => {
-        return new MaterialController().allocate(req, res);
+        return new MaterialController().assign(req, res);
     })
 );
 

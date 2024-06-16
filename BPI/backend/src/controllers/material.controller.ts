@@ -1,9 +1,8 @@
 import { HTTP_STATUS } from "../constants/http_status";
-import { MaterialModel } from "../models/material.model";
+import { Material, MaterialModel } from "../models/material.model";
 import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
-import { UserController } from "./user.controller";
-import { User, UserModel } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 import { MATERIAL_STATUS } from "../constants/all_about_models";
 
 const STOCKED = MATERIAL_STATUS[0];
@@ -13,7 +12,10 @@ export class MaterialController {
     constructor() {}
 
     getAll = async (req: Request, res: Response) => {
-        const materials = await MaterialModel.find({});
+        const materials = await MaterialModel
+            .find({})
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials && materials.length > 0) {
             res.send(materials);
         } else {
@@ -22,7 +24,10 @@ export class MaterialController {
     }
 
     getById = async (req: Request, res: Response) => {
-        const material = await MaterialModel.findById(req.params.id);
+        const material = await MaterialModel
+            .findById(req.params.id)
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (material) {
             res.send(material);
         } else {
@@ -31,7 +36,10 @@ export class MaterialController {
     }
 
     getByName = async (req: Request, res: Response) => {
-        const material = await MaterialModel.findOne({ name: req.params.name });
+        const material = await MaterialModel
+            .findOne({ name: req.params.name })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (material) {
             res.send(material);
         } else {
@@ -40,7 +48,10 @@ export class MaterialController {
     }
 
     getByStatus = async (req: Request, res: Response) => {
-        const materials = await MaterialModel.find({ status: req.params.status });
+        const materials = await MaterialModel
+            .find({ status: req.params.status })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials && materials.length > 0) {
             res.send(materials);
         } else {
@@ -49,7 +60,12 @@ export class MaterialController {
     }
 
     getByRenewalDate = async (req: Request, res: Response) => {
-        const materials = await MaterialModel.find({ renewalDate: { $gte: req.params.renewalDateStart, $lte: req.params.renewalDateEnd } });
+        const materials = await MaterialModel
+            .find({ renewalDate: { 
+                $gte: req.params.renewalDateStart, $lte: req.params.renewalDateEnd 
+            } })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials && materials.length > 0) {
             res.send(materials);
         } else {
@@ -58,7 +74,12 @@ export class MaterialController {
     }
 
     getByReturnDeadline = async (req: Request, res: Response) => {
-        const materials = await MaterialModel.find({ returnDeadline: { $gte: req.params.returnDeadlineStart, $lte: req.params.returnDeadlineEnd } });
+        const materials = await MaterialModel
+            .find({ returnDeadline: {
+                 $gte: req.params.returnDeadlineStart, $lte: req.params.returnDeadlineEnd 
+            } })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials && materials.length > 0) {
             res.send(materials);
         } else {
@@ -74,7 +95,9 @@ export class MaterialController {
                 { renewalDate: { $regex: searchTerms, $options: 'i' } },
                 { returnDeadline: { $regex: searchTerms, $options: 'i' } }
             ]
-        });
+        })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials) {
             res.send(materials);
         } else {
@@ -84,7 +107,10 @@ export class MaterialController {
 
     getAccordingToTag = async (req: Request, res: Response) => {
         const targetTag = req.body.tag;
-        const materials = await MaterialModel.find({ taggedAs: targetTag });
+        const materials = await MaterialModel
+            .find({ taggedAs: targetTag })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials) {
             res.send(materials);
         } else {
@@ -94,7 +120,10 @@ export class MaterialController {
 
     getAccordingToTags = async (req: Request, res: Response) => {
         const tags = req.body.tags;
-        const materials = await MaterialModel.find({ taggedAs: { $in: tags } });
+        const materials = await MaterialModel
+            .find({ taggedAs: { $in: tags } })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials) {
             res.send(materials);
         } else {
@@ -104,7 +133,10 @@ export class MaterialController {
 
     getAccordingToUser = async (req: Request, res: Response) => {
         const targetUser = req.body.user;
-        const materials = await MaterialModel.find({ user: targetUser });
+        const materials = await MaterialModel
+            .find({ user: targetUser })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials) {
             res.send(materials);
         } else {
@@ -115,7 +147,10 @@ export class MaterialController {
     getAccordingToOrganization = async (req: Request, res: Response) => {
         const organization = req.body.organization;
         const users = await UserModel.find({ assignedTo: organization });
-        const materials = await MaterialModel.find({ user: { $in: users } });
+        const materials = await MaterialModel
+            .find({ user: { $in: users } })
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (materials) {
             res.send(materials);
         } else {
@@ -150,7 +185,7 @@ export class MaterialController {
             return;
         }
         const materials = await MaterialModel.insertMany(await new MaterialSeeder().defMaterialsForUser(userEmail, numberOfMaterials));
-        
+
         if (materials) {
             res.status(HTTP_STATUS.CREATED).send(materials);
         } else {
@@ -194,7 +229,7 @@ export class MaterialController {
         }
     }
 
-    allocate = async (req: Request, res: Response) => {
+    assign = async (req: Request, res: Response) => {
         const { user } = req.body;
         const material = await MaterialModel.findById(req.params.id);
         if (material) {
@@ -249,7 +284,10 @@ export class MaterialController {
     }
 
     getRandom = async () => {
-        const materials = await MaterialModel.find({});
+        const materials = await MaterialModel
+            .find({})
+            .populate("taggedAs")
+            .populate("assignedTo");
         return materials[Math.floor(Math.random() * materials.length)];
     }
 }

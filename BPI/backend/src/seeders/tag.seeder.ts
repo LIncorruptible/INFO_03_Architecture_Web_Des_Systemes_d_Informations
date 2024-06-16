@@ -5,22 +5,9 @@ import { faker } from "@faker-js/faker";
 export class TagSeeder {
 
     defTag(): Tag {
-
-        let acceptedScopes: string[] = [];
-
-        const maxElements = Math.floor(Math.random() * ROLES_SCOPES.length) + 1;
-        
-        while (acceptedScopes.length < maxElements) {
-            const randomIndex = Math.floor(Math.random() * ROLES_SCOPES.length);
-            const randomScope = ROLES_SCOPES[randomIndex];
-
-            if (!acceptedScopes.includes(randomScope)) acceptedScopes.push(randomScope);
-        }
-
         const tag: Tag = {
             id: faker.string.uuid(),
-            name: "[TAG]" + faker.lorem.word(),
-            acceptedRolesScopes: acceptedScopes
+            name: "[TAG]" + faker.lorem.word()
         };
         return tag;
     }
@@ -35,11 +22,11 @@ export class TagSeeder {
     
     defTagsAccordingToData(): Tag[] {
         const tags: Tag[] = [
-            { id: faker.string.uuid(), name: "MOBILIER", acceptedRolesScopes: [] },
-            { id: faker.string.uuid(), name: "BUREAUTIQUE", acceptedRolesScopes: [] },
-            { id: faker.string.uuid(), name: "RESEAU", acceptedRolesScopes: [] },
-            { id: faker.string.uuid(), name: "INFORMATIQUE", acceptedRolesScopes: [] },
-            { id: faker.string.uuid(), name: "AUTRE", acceptedRolesScopes: [] }
+            { id: faker.string.uuid(), name: "MOBILIER" },
+            { id: faker.string.uuid(), name: "BUREAUTIQUE" },
+            { id: faker.string.uuid(), name: "RESEAU" },
+            { id: faker.string.uuid(), name: "INFORMATIQUE" },
+            { id: faker.string.uuid(), name: "AUTRE" }
         ];
         return tags;
     }

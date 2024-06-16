@@ -105,7 +105,6 @@ export class TagController {
         const tag = await TagModel.findById(req.params.id);
         if (tag) {
             const newName = req.body.name;
-            const acceptedRolesScopes = req.body.acceptedRolesScopes || tag.acceptedRolesScopes;
             if (newName && newName !== tag.name) {
                 const isDuplicate = await this.isAlreadyExists(newName);
                 if (isDuplicate) {
@@ -114,7 +113,6 @@ export class TagController {
                 }
             }
             tag.name = newName || tag.name;
-            tag.acceptedRolesScopes = acceptedRolesScopes;
             const updatedTag = await tag.save();
             res.send(updatedTag);
         } else {
@@ -156,6 +154,9 @@ export class TagController {
 
     getRandom = async () => {
         const tags = await TagModel.find({});
-        return tags[Math.floor(Math.random() * tags.length)];
+
+        const tag: Tag = tags[Math.floor(Math.random() * tags.length)];
+
+        return tag;
     }
 }

@@ -16,7 +16,10 @@ export class RequestController {
     constructor() {}
 
     getAll = async (req: Request, res: Response) => {
-        const requests = await RequestModel.find({});
+        const requests = await RequestModel
+            .find({})
+            .populate('requester')
+            .populate('material');
         if (requests && requests.length > 0) {
             res.send(requests);
         } else {
@@ -25,7 +28,10 @@ export class RequestController {
     }
 
     getById = async (req: Request, res: Response) => {
-        const request = await RequestModel.findById(req.params.id);
+        const request = await RequestModel
+            .findById(req.params.id)
+            .populate('requester')
+            .populate('material');
         if (request) {
             res.send(request);
         } else {
@@ -34,7 +40,10 @@ export class RequestController {
     }
 
     getByType = async (req: Request, res: Response) => {
-        const requests = await RequestModel.find({ type: req.params.type });
+        const requests = await RequestModel
+            .find({ type: req.params.type })
+            .populate('requester')
+            .populate('material');
         if (requests) {
             res.send(requests);
         } else {
@@ -43,7 +52,10 @@ export class RequestController {
     }
 
     getByStatus = async (req: Request, res: Response) => {
-        const requests = await RequestModel.find({ status: req.params.status });
+        const requests = await RequestModel
+            .find({ status: req.params.status })
+            .populate('requester')
+            .populate('material');
         if (requests) {
             res.send(requests);
         } else {
@@ -57,7 +69,9 @@ export class RequestController {
                 $gte: req.params.startDate,
                 $lt: req.params.endDate
             }
-        });
+        })
+            .populate('requester')
+            .populate('material');
         if (requests) {
             res.send(requests);
         } else {
@@ -70,7 +84,10 @@ export class RequestController {
         if(!targetUser) {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User not found" });
         }
-        const requests = await RequestModel.find({ user: targetUser });
+        const requests = await RequestModel
+            .find({ user: targetUser })
+            .populate('requester')
+            .populate('material');
         if (requests) {
             res.send(requests);
         } else {
@@ -83,7 +100,10 @@ export class RequestController {
         if(!targetMaterial) {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Material not found" });
         }
-        const requests = await RequestModel.find({ material: targetMaterial });
+        const requests = await RequestModel
+            .find({ material: targetMaterial })
+            .populate('requester')
+            .populate('material');
         if (requests) {
             res.send(requests);
         } else {

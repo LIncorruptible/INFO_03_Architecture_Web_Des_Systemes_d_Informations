@@ -1,31 +1,33 @@
-<header>
-    <div class="container">
-        <a routerLink="/" class="logo-container">
-            <img src="assets/inventory.png" alt="Logo" class="logo-image">
-            <span class="logo-text">BPI</span>
-        </a>
-        <nav class="left-nav">
-            <ul *ngIf="isAuth">
-                <li>
-                    <a routerLink="/inventory">Inventory</a>
-                </li>
-                <li>
-                    <a routerLink="/requests">Requests</a>
-                </li>
-            </ul>
-        </nav>
-        <nav class="right-nav">
-            <ul>
-                <li *ngIf="!isAuth">
-                    <a routerLink="/login">Login</a>
-                </li>
-                <li *ngIf="isAuth" class="username">
-                    {{ user.username }}
-                </li>
-                <li *ngIf="isAuth">
-                    <a (click)="logout()" routerLink="/">Logout</a>
-                </li>
-            </ul>
-        </nav>
+<header class="bg-white border-bottom py-0">
+    <div class="container-fluid px-0">
+        <div class="d-flex justify-content-between align-items-center">
+            <a routerLink="/" class="logo-container d-flex align-items-center text-decoration-none text-dark">
+                <img src="assets/inventory.png" alt="Logo" class="logo-image me-2">
+                <span class="logo-text mb-0">BPI</span>
+            </a>
+            <nav class="left-nav">
+                <ul class="list-unstyled d-flex mb-0" *ngIf="isAuth">
+                    <li class="me-3">
+                        <a routerLink="/inventory" class="text-dark text-decoration-none">Inventory</a>
+                    </li>
+                    <li>
+                        <a routerLink="/requests" class="text-dark text-decoration-none">Requests</a>
+                    </li>
+                </ul>
+            </nav>
+            <nav class="right-nav">
+                <ul class="list-unstyled mb-0 d-flex align-items-center">
+                    <li *ngIf="!isAuth">
+                        <a routerLink="/login" class="text-dark text-decoration-none pe-3">Login</a>
+                    </li>
+                    <li *ngIf="isAuth" class="username me-3">
+                        {{ user.username }}
+                    </li>
+                    <li *ngIf="isAuth">
+                        <a (click)="logout()" routerLink="/" class="text-dark text-decoration-none pe-3">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </header>

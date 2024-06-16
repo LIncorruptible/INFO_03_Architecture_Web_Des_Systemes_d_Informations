@@ -1,39 +1,7 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 3rem;
-}
-
-.details {
-    width: 28rem;
-    background-color: #fff;
+.card {
+    max-width: 28rem; /* Ajustez la largeur maximale selon votre mise en page */
+    margin: 2rem auto; /* Centrer la carte avec un espace de 2rem en haut et en bas */
     border: 1px solid #ddd;
     border-radius: 0.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form > * {
-    margin-bottom: 1.5rem;
-}
-
-.register {
-    text-align: center;
-    margin-top: 1rem;
-}
-
-.register a {
-    color: #317AC1;
-    text-decoration: none;
-}
-
-.register a:hover {
-    text-decoration: underline;
 }

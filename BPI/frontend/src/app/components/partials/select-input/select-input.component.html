@@ -1,5 +1,5 @@
 <input-container [label]="label">
-    <select [formControl]="formControl" [(ngModel)]="nrSelect">
+    <select class="form-select" [formControl]="formControl" [(ngModel)]="nrSelect">
         <option value="" disabled>Select {{ label }}</option>
         <option *ngFor="let object of selectObjectsList" [ngValue]="object">
             {{ object[viewValue] }}

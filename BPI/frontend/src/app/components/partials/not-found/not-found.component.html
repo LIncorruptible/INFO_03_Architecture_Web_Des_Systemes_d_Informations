@@ -1,4 +1,4 @@
-<div *ngIf="visible">
-    {{  notFoundMessage }}
-    <a [routerLink]="resetLinkRoute"> {{ resetLinkText }}</a>
+<div *ngIf="visible" class="d-flex align-items-center justify-content-center flex-column text-center" style="height: 15rem;">
+    <p class="display-4">{{ notFoundMessage }}</p>
+    <a [routerLink]="resetLinkRoute" class="btn btn-primary btn-lg mt-3">{{ resetLinkText }}</a>
 </div>

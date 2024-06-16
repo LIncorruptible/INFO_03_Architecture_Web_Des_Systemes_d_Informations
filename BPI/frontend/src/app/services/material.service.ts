@@ -18,14 +18,16 @@ const USER = ROLES_SCOPES[2];
 })
 export class MaterialService {
 
+  materials!: Material[];
   materialsObservable: Observable<Material[]> = new Observable<Material[]>();
 
-  constructor(private http:HttpClient, private userService: UserService) {    
+  constructor(private http:HttpClient, private userService: UserService) {   
     this.materialsObservable = this.getAccordingToCurrentUser();
 
     this.materialsObservable.subscribe((newMaterials) => {
+      this.materials = newMaterials;
     });
-   }
+  }
 
   getAll(): Observable<Material[]> {
     return this.http.get<Material[]>(URLS.MATERIALS.BASE);
@@ -56,5 +58,13 @@ export class MaterialService {
       return this.getByOrganization(currentUser.assignedTo);
     else 
       return this.getByUser(currentUser);
+  }
+
+  assign(material: Material): Observable<Material> {
+    return this.http.put<Material>(URLS.MATERIALS.ASSIGN + material.id, material);
+  }
+
+  refund(material: Material): Observable<Material> {
+    return this.http.put<Material>(URLS.MATERIALS.REFUND + material.id, material);
   }
 }

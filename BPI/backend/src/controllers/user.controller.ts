@@ -16,7 +16,9 @@ export class UserController {
     constructor() {}
 
     getAll = async (req: Request, res: Response) => {
-        const users = await UserModel.find({});
+        const users = await UserModel
+            .find({})
+            .populate('assignedTo');
         if (users && users.length > 0) {
             res.send(users);
         } else {
@@ -25,7 +27,9 @@ export class UserController {
     }
 
     getById = async (req: Request, res: Response) => {
-        const user = await UserModel.findById(req.params.id);
+        const user = await UserModel
+            .findById(req.params.id)
+            .populate('assignedTo');
         if (user) {
             res.send(user);
         } else {
@@ -34,7 +38,9 @@ export class UserController {
     }
 
     getByUsername = async (req: Request, res: Response) => {
-        const user = await UserModel.findOne({ username: req.params.username });
+        const user = await UserModel
+            .findOne({ username: req.params.username })
+            .populate('assignedTo');
         if (user) {
             res.send(user);
         } else {
@@ -43,7 +49,9 @@ export class UserController {
     }
 
     getByEmail = async (req: Request, res: Response) => {
-        const user = await UserModel.findOne({ email: req.params.email });
+        const user = await UserModel
+            .findOne({ email: req.params.email })
+            .populate('assignedTo');
         if (user) {
             res.send(user);
         } else {
@@ -52,7 +60,9 @@ export class UserController {
     }
 
     getByRoleScope = async (req: Request, res: Response) => {
-        const users = await UserModel.find({ roleScope: req.params.roleScope });
+        const users = await UserModel
+            .find({ roleScope: req.params.roleScope })
+            .populate('assignedTo');
         if (users) {
             res.send(users);
         } else {
@@ -69,7 +79,8 @@ export class UserController {
                 { firstName: { $regex: searchTerms, $options: 'i' } },
                 { lastName: { $regex: searchTerms, $options: 'i' } }
             ]
-        });
+        })
+            .populate('assignedTo');
         if (users) {
             res.send(users);
         } else {
@@ -82,7 +93,9 @@ export class UserController {
         if (!targetOrganization) {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Organization not found" });
         }
-        const users = await UserModel.find({ assignedTo: targetOrganization });
+        const users = await UserModel
+            .find({ assignedTo: targetOrganization })
+            .populate('assignedTo');
         if (users) {
             res.send(users);
         } else {

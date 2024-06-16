@@ -28,9 +28,18 @@ export class InventoryPageComponent {
     materialService.materialsObservable.subscribe((newMaterials) => {
       this.materials = newMaterials;
     });
+    
   }
 
   get isAdmin(): boolean {
     return this.user.roleScope === ADMIN;
+  }
+
+  get numberOfMaterials(): number {
+    if (this.materials) {
+      return this.materials.length;
+    }
+
+    return 0;
   }
 }

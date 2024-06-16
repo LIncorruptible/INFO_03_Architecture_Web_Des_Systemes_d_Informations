@@ -22,12 +22,12 @@ import { RegisterPageComponent } from './components/pages/register-page/register
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { SelectInputComponent } from './components/partials/select-input/select-input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserHomeComponent } from './components/partials/user-home/user-home.component';
-import { OrganizationHomeComponent } from './components/partials/organization-home/organization-home.component';
-import { AdminHomeComponent } from './components/partials/admin-home/admin-home.component';
-import { GuestHomeComponent } from './components/partials/guest-home/guest-home.component';
+import { UserHomeComponent } from './components/partials/home/user-home/user-home.component';
+import { OrganizationHomeComponent } from './components/partials/home/organization-home/organization-home.component';
+import { AdminHomeComponent } from './components/partials/home/admin-home/admin-home.component';
+import { GuestHomeComponent } from './components/partials/home/guest-home/guest-home.component';
 import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
-import { MaterialTableComponent } from './components/partials/material-table/material-table.component';
+import { MaterialTableComponent } from './components/partials/table/material-table/material-table.component';
 
 @NgModule({
   declarations: [
