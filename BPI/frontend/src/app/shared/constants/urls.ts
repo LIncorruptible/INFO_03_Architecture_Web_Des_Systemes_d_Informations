@@ -60,6 +60,7 @@ export const URLS = {
         BY_DATE: `${BASE_URL}/api/requests/date/`,
         BY_REQUESTER: `${BASE_URL}/api/requests/requester/`,
         BY_MATERIAL: `${BASE_URL}/api/requests/material/`,
+        BY_ORGANIZATION: `${BASE_URL}/api/requests/organization/`,
         ADD: `${BASE_URL}/api/requests/add`,
         UPDATE: `${BASE_URL}/api/requests/update/`,
         DELETE: `${BASE_URL}/api/requests/delete/`

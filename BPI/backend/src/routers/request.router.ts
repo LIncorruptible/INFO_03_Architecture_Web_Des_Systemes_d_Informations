@@ -1,5 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import { RequestController } from "../controllers/request.controller";
+import { verifyAndConvertUser } from "../middleware/user.middleware";
 const router = require("express").Router();
 
 const requestController = new RequestController();
@@ -50,6 +51,13 @@ router.get(
     "/material/:material",
     expressAsyncHandler(async (req, res) => {
         await requestController.getAccordingToMaterial(req, res);
+    })
+);
+
+router.get(
+    "/organization/:organization",
+    expressAsyncHandler(async (req, res) => {
+        await requestController.getAccordingToOrganization(req, res);
     })
 );
 

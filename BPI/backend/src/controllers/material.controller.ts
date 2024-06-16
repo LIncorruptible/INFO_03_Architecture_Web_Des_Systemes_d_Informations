@@ -4,6 +4,7 @@ import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
 import { UserModel } from "../models/user.model";
 import { MATERIAL_STATUS } from "../constants/all_about_models";
+import mongoose from "mongoose";
 
 const STOCKED = MATERIAL_STATUS[0];
 const USED = MATERIAL_STATUS[1];
@@ -106,7 +107,7 @@ export class MaterialController {
     }
 
     getAccordingToTag = async (req: Request, res: Response) => {
-        const targetTag = req.body.tag;
+        const targetTag = req.params.tag;
         const materials = await MaterialModel
             .find({ taggedAs: targetTag })
             .populate("taggedAs")
@@ -119,7 +120,7 @@ export class MaterialController {
     }
 
     getAccordingToTags = async (req: Request, res: Response) => {
-        const tags = req.body.tags;
+        const tags = req.params.tags;
         const materials = await MaterialModel
             .find({ taggedAs: { $in: tags } })
             .populate("taggedAs")
@@ -132,9 +133,13 @@ export class MaterialController {
     }
 
     getAccordingToUser = async (req: Request, res: Response) => {
-        const targetUser = req.body.user;
+        const targetUser = req.params.user;
+        if (!targetUser) {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Invalid target user" });
+            return;
+        }
         const materials = await MaterialModel
-            .find({ user: targetUser })
+            .find({ assignedTo: targetUser })
             .populate("taggedAs")
             .populate("assignedTo");
         if (materials) {
@@ -145,8 +150,12 @@ export class MaterialController {
     }
 
     getAccordingToOrganization = async (req: Request, res: Response) => {
-        const organization = req.body.organization;
-        const users = await UserModel.find({ assignedTo: organization });
+        const targetOrganization = req.params.organization;
+        if (!targetOrganization) {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Invalid target organization" });
+            return;
+        }
+        const users = await UserModel.find({ assignedTo: targetOrganization });
         const materials = await MaterialModel
             .find({ user: { $in: users } })
             .populate("taggedAs")

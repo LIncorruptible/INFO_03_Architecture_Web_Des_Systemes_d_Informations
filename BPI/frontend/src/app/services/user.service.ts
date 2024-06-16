@@ -62,7 +62,7 @@ export class UserService {
                 error: (errorResponse) => {
                     this.toastrService.error(
                         'Login failed' 
-                        + (errorResponse as HttpErrorResponse).error.message
+                        + ' ' + (errorResponse as HttpErrorResponse).error.message
                     );
                 }
             })

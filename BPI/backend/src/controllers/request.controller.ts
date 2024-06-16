@@ -6,6 +6,7 @@ import { RequestSeeder } from "../seeders/request.seeder";
 import { Request as CustomRequest } from "../models/request.model";
 import { MaterialController } from "./material.controller";
 import { REQUEST_STATUS } from "../constants/all_about_models";
+import { UserModel } from "../models/user.model";
 
 const PENDING = REQUEST_STATUS[0];
 const APPROVED = REQUEST_STATUS[1];
@@ -85,9 +86,10 @@ export class RequestController {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User not found" });
         }
         const requests = await RequestModel
-            .find({ user: targetUser })
+            .find({ requester: targetUser })
             .populate('requester')
             .populate('material');
+
         if (requests) {
             res.send(requests);
         } else {
@@ -109,6 +111,21 @@ export class RequestController {
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Request not found" });
         }
+    }
+
+    getAccordingToOrganization = async (req: Request, res: Response) => {
+        const targetOrganization = req.params.organization;
+        const users = await UserModel.find({ assignedTo: targetOrganization });
+        const requests = await RequestModel
+            .find({ requester: { $in: users } })
+            .populate("requester")
+            .populate("material")
+        if (requests) {
+            res.send(requests);
+        } else {
+            res.send(HTTP_STATUS.NOT_FOUND).send({ message: "Requests not found" });
+        }
+
     }
 
     seed = async (req: Request, res: Response) => {
@@ -139,11 +156,14 @@ export class RequestController {
     } 
     
     add = async (req: Request, res: Response) => {
-        const { requester, material, type, status, date } = req.body;
+        console.log('Creating request')
+        const { requester, material, type } = req.body;
+        console.log('body : ' + JSON.stringify(req.body))
+
         const request = new RequestModel({
-            requester,
-            material,
-            type,
+            requester: requester,
+            material: material,
+            type: type,
             status: PENDING,
             date: new Date().getDate()
         });
@@ -153,7 +173,8 @@ export class RequestController {
             return;
         }
 
-        const createdRequest = await request.save();
+        const createdRequest = await RequestModel.create(request);
+
         if (createdRequest) {
             res.status(HTTP_STATUS.CREATED).send(createdRequest);
         } else {
@@ -194,7 +215,7 @@ export class RequestController {
             const updatedRequest = await request.save();
             if (updatedRequest) {
                 req.body = { user: request.requester };
-                new MaterialController().allocate(req, res);
+                new MaterialController().assign(req, res);
                 res.send(updatedRequest);
             } else {
                 res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error approving request" });

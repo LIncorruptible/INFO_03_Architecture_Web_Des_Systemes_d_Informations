@@ -17,8 +17,8 @@ const requestSchema = new Schema<Request>({
     requester: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.USER, required: true },
     material: { type: Schema.Types.ObjectId, ref: MODELS_NAMES.MATERIAL, required: true },
     type: { type: String, required: true, enum: REQUEST_TYPES },
-    status: { type: String, required: true, enum: REQUEST_STATUS },
-    date: { type: Date, required: true },
+    status: { type: String, enum: REQUEST_STATUS, default: REQUEST_STATUS[0]},
+    date: { type: Date, default: Date.now},
 }, {
     toJSON: {
         virtuals: true

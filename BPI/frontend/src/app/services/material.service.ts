@@ -11,17 +11,21 @@ import { ROLES_SCOPES } from '../shared/constants/all_about_models';
 
 const ADMIN = ROLES_SCOPES[0];
 const ORGANIZATION = ROLES_SCOPES[1];
-const USER = ROLES_SCOPES[2];
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
 
+  user!: User;
   materials!: Material[];
   materialsObservable: Observable<Material[]> = new Observable<Material[]>();
 
   constructor(private http:HttpClient, private userService: UserService) {   
+    this.userService.userObservable.subscribe((newUser) => {
+      this.user = newUser;
+    });
+
     this.materialsObservable = this.getAccordingToCurrentUser();
 
     this.materialsObservable.subscribe((newMaterials) => {
@@ -34,30 +38,24 @@ export class MaterialService {
   }
 
   getByTag(tag: Tag): Observable<Material[]> {
-    return this.http.get<Material[]>(URLS.MATERIALS.BY_TAG + tag);
-  }
-
-  getBySearch(searchTerm: string): Observable<Material[]> {
-    return this.http.get<Material[]>(URLS.MATERIALS.BY_SEARCH + searchTerm);
+    return this.http.get<Material[]>(URLS.MATERIALS.BY_TAG + tag.id);
   }
 
   getByUser(user: User): Observable<Material[]> {
-    return this.http.get<Material[]>(URLS.MATERIALS.BY_USER + user);
+    return this.http.get<Material[]>(URLS.MATERIALS.BY_USER + user.id);
   }
 
   getByOrganization(organization: Organization): Observable<Material[]> {
-    return this.http.get<Material[]>(URLS.MATERIALS.BY_ORGANIZATION + organization);
+    return this.http.get<Material[]>(URLS.MATERIALS.BY_ORGANIZATION + organization.id);
   }
 
   getAccordingToCurrentUser(): Observable<Material[]> {
-    const currentUser: User = this.userService.currentUser();
-
-    if (currentUser.roleScope === ADMIN) 
+    if (this.user.roleScope === ADMIN) 
       return this.getAll();
-    else if (currentUser.roleScope === ORGANIZATION) 
-      return this.getByOrganization(currentUser.assignedTo);
+    else if (this.user.roleScope === ORGANIZATION) 
+      return this.getByOrganization(this.user.assignedTo);
     else 
-      return this.getByUser(currentUser);
+      return this.getByUser(this.user);
   }
 
   assign(material: Material): Observable<Material> {

@@ -270,8 +270,6 @@ export class UserController {
             roleScope
         }
 
-        console.log("Utilisateur en cours de création : ", JSON.stringify(newUser));
-
         const dbUser = await UserModel.create(newUser);
         res.send(this.generateTokenReponse(dbUser));
     }

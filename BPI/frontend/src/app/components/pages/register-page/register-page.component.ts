@@ -79,8 +79,6 @@ export class RegisterPageComponent {
       return;
     }
 
-    console.log(this.registerForm.value.assignedTo.id);
-
     const fv = this.registerForm.value;
 
     const user: IUserRegister = {
