@@ -1,7 +1,9 @@
 <div class="container">
     <div class="details">
-        <material-table *ngIf="numberOfMaterials > 0"></material-table>
-        <not-found *ngIf="!isAdmin"
+        <material-table 
+        *ngIf="numberOfMaterials > 0"
+        ></material-table>
+        <not-found
         [visible]="numberOfMaterials === 0"
         notFoundMessage="No materials found"
         resetLinkText="Request a material"

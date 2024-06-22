@@ -2,9 +2,8 @@ import { HTTP_STATUS } from "../constants/http_status";
 import { Material, MaterialModel } from "../models/material.model";
 import { Response, Request } from "express";
 import { MaterialSeeder } from "../seeders/material.seeder";
-import { UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 import { MATERIAL_STATUS } from "../constants/all_about_models";
-import mongoose from "mongoose";
 
 const STOCKED = MATERIAL_STATUS[0];
 const USED = MATERIAL_STATUS[1];
@@ -139,7 +138,7 @@ export class MaterialController {
             return;
         }
         const materials = await MaterialModel
-            .find({ assignedTo: targetUser })
+            .find({ $or: [{ assignedTo: targetUser }, { status: STOCKED }] })
             .populate("taggedAs")
             .populate("assignedTo");
         if (materials) {
@@ -157,7 +156,7 @@ export class MaterialController {
         }
         const users = await UserModel.find({ assignedTo: targetOrganization });
         const materials = await MaterialModel
-            .find({ user: { $in: users } })
+            .find({ $or: [{ assignedTo: { $in: users } }, { status: STOCKED }] })
             .populate("taggedAs")
             .populate("assignedTo");
         if (materials) {
@@ -245,7 +244,6 @@ export class MaterialController {
             material.assignedTo = user;
             material.status = USED;
             const updatedMaterial = await material.save();
-
             if (updatedMaterial) {
                 res.send(updatedMaterial);
             } else {
@@ -259,10 +257,10 @@ export class MaterialController {
     refund = async (req: Request, res: Response) => {
         const material = await MaterialModel.findById(req.params.id);
         if (material) {
-            material.assignedTo = null as any;
+            const stockedUser = await UserModel.findOne({ username: "stockedUser" }) as User;
+            material.assignedTo = stockedUser;
             material.status = STOCKED;
-            const updatedMaterial = await material.save();
-
+            const updatedMaterial = await (await material.save()).populate("taggedAs");
             if (updatedMaterial) {
                 res.send(updatedMaterial);
             } else {

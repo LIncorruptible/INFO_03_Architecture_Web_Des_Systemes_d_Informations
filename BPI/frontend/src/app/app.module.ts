@@ -14,7 +14,7 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/
 import { NotFoundComponent } from './components/partials/not-found/not-found.component';
 import { TagsComponent } from './components/partials/tags/tags.component';
 import { TextInputComponent } from './components/partials/text-input/text-input.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TitleComponent } from './components/partials/title/title.component';
 import { SearchComponent } from './components/partials/search/search.component';
 import { HomeComponent } from './components/pages/home/home.component';
@@ -28,6 +28,9 @@ import { AdminHomeComponent } from './components/partials/home/admin-home/admin-
 import { GuestHomeComponent } from './components/partials/home/guest-home/guest-home.component';
 import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
 import { MaterialTableComponent } from './components/partials/table/material-table/material-table.component';
+import { ProfilePageComponent } from './components/pages/profile-page/profile-page.component';
+import { UserTableComponent } from './components/partials/table/user-table/user-table.component';
+import { UsersPageComponent } from './components/pages/users-page/users-page.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,9 @@ import { MaterialTableComponent } from './components/partials/table/material-tab
     GuestHomeComponent,
     InventoryPageComponent,
     MaterialTableComponent,
+    ProfilePageComponent,
+    UserTableComponent,
+    UsersPageComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +65,7 @@ import { MaterialTableComponent } from './components/partials/table/material-tab
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',

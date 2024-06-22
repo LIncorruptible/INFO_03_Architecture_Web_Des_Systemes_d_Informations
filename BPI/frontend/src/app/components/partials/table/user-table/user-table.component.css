@@ -4,31 +4,14 @@
 
 .details {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: right;
     align-items: center;
     background-color: #454d55;
-    border-top: 1px solid #454d55;
+    border-top : 1px solid #454d55;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     padding: 1rem;
     height: 100%;
-}
-
-.selecter {
-    display: flex;
-    align-items: center;
-    margin: 0.5rem;
-}
-
-.selecter label {
-    margin-right: 0.5rem;
-    color: white;
-    white-space: nowrap;
-}
-
-.selecter select {
-    min-width: 150px;
 }
 
 .table {

@@ -14,6 +14,7 @@ const USED = MATERIAL_STATUS[1];
 export class MaterialSeeder {
     async defMaterial(): Promise<Material> {
         const randomUser = await new UserController().getRandom();
+        const stockedUSer = await new UserController().getStockedUser();
 
         const randomStatus = MATERIAL_STATUS[Math.floor(Math.random() * MATERIAL_STATUS.length)];
         const randomTag = await new TagController().getRandom();
@@ -23,7 +24,7 @@ export class MaterialSeeder {
             name: faker.lorem.word(),
             taggedAs: randomTag || await new TagSeeder().defTag(),
             status: randomStatus,
-            assignedTo: randomUser || await new UserSeeder().defUser(),
+            assignedTo: (randomStatus === STOCKED) ? stockedUSer : randomUser,
             forOrganization: Math.random() < 0.5,
             renewalDate: faker.date.future(),
             returnDeadline: faker.date.future()
@@ -108,16 +109,20 @@ export class MaterialSeeder {
 
         for (let i = 0; i < 5; i++) {
             const tag = mobilierTags[i] || await new TagController().getRandom();
-            const randomUser = await new UserController().getRandom();
             const tagItems = (i === 0) ? mobilier : (i === 1) ? bureautique : (i === 2) ? reseau : (i === 3) ? informatique : autre;
 
+            const randomUser = await new UserController().getRandom();
+            const stockedUSer = await new UserController().getStockedUser();
+
+            const randomStatus = MATERIAL_STATUS[Math.floor(Math.random() * MATERIAL_STATUS.length)];
+            
             for (let j = 0; j < tagItems.length; j++) {
                 const material: Material = {
                     id: faker.string.uuid(),
                     name: tagItems[j],
                     taggedAs: tag,
-                    status: MATERIAL_STATUS[Math.floor(Math.random() * MATERIAL_STATUS.length)],
-                    assignedTo: randomUser,
+                    status: randomStatus,
+                    assignedTo: (randomStatus === STOCKED) ? stockedUSer : randomUser,
                     forOrganization: Math.random() < 0.5,
                     renewalDate: faker.date.future(),
                     returnDeadline: faker.date.future()

@@ -15,6 +15,8 @@ const USER_KEY = "User";
 })
 export class UserService {
 
+    users!: User[];
+
     private setUserLocalStorage(user: User) {
         localStorage.setItem(USER_KEY, JSON.stringify(user));
     }
@@ -30,10 +32,19 @@ export class UserService {
     }
 
     private userSubject = new BehaviorSubject<User>(this.getUserLocalStorage());
-    public userObservable:Observable<User>;
+    
+    userObservable:Observable<User>;
+    usersObservable: Observable<User[]> = new Observable<User[]>();
 
     constructor(private http:HttpClient, private toastrService:ToastrService) { 
         this.userObservable = this.userSubject.asObservable();
+
+        this.getAll().subscribe((newUsers) => {
+            this.users = newUsers;
+            this.usersObservable = new Observable<User[]>(subscriber => {
+                subscriber.next(this.users);
+            });
+        });
     }
 
     public currentUser(): User {
@@ -91,6 +102,24 @@ export class UserService {
                 error: (errorResponse) => {
                     this.toastrService.error(
                         'Registration failed' 
+                        + (errorResponse as HttpErrorResponse).error.message
+                    );
+                }
+            })
+        );
+    }
+
+    remove = (userToDelete: User): Observable<User[]> => {
+        return this.http.delete<User[]>(
+            URLS.USERS.DELETE + userToDelete.id
+        ).pipe(
+            tap({
+                next: (user) => {
+                    this.toastrService.success('User deleted');
+                },
+                error: (errorResponse) => {
+                    this.toastrService.error(
+                        'User deletion failed ' 
                         + (errorResponse as HttpErrorResponse).error.message
                     );
                 }

@@ -1,10 +1,41 @@
 <div class="container">
+    <div class="details">
+        <button (click)="resetFilters()" class="btn btn-primary btn-sm mx-1">Reset</button>
+
+        <button (click)="sortByMaterialField('name')" class="btn btn-info btn-sm mx-1">By Name</button>
+
+        <div class="selecter">
+            <label>Tag :</label>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" [formControl]="selecterControl" (change)="getTagSelection($event)">
+                <option >ALL</option>
+                <option *ngFor="let tag of tags">{{ tag.name }}</option>
+            </select>
+        </div>
+
+        <div class="selecter">
+            <label>Status</label>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" [formControl]="selecterControl" (change)="getStatusSelection($event)">
+                <option >ALL</option>
+                <option *ngFor="let stat of status">{{ stat }}</option>
+            </select>
+        </div>
+
+        <div class="selecter">
+            <label>For Organization</label>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" [formControl]="selecterControl" (change)="getForOrganizationSelection($event)">
+                <option >ALL</option>
+                <option *ngFor="let choice of forOrganization">{{ choice }}</option>
+            </select>
+        </div>
+
+        <button *ngIf="isAdmin" (click)="create()" class="btn btn-success btn-sm mx-1">Create</button>
+    </div>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Tag</th>
-                <th *ngIf="isAdmin" scope="col">Status</th>
+                <th scope="col">Status</th>
                 <th scope="col">Assigned To</th>
                 <th scope="col">For Organization</th>
                 <th scope="col">Renewal</th>
@@ -16,23 +47,38 @@
             <tr *ngFor="let material of materials">
                 <td>{{ material.name }}</td>
                 <td>{{ material.taggedAs.name }}</td>
-                <td *ngIf="isAdmin">{{ material.status }}</td>
+                <td>{{ material.status }}</td>
                 <td>{{ material.assignedTo.firstName }} {{ material.assignedTo.lastName }}</td>
                 <td>{{ material.forOrganization }}</td>
                 <td>{{ material.renewalDate | date:'shortDate' }}</td>
                 <td>{{ material.returnDeadline | date:'shortDate' }}</td>
                 <td>
                     <ng-container *ngIf="!isAdmin">
-                        <button type="submit" *ngIf="!isAlreadyRequested(material)" (click)="askForRefund(material)" class="btn btn-primary btn-sm">Ask for refund</button>
-                        <button *ngIf="isAlreadyRequested(material)" class="btn btn-secondary btn-sm">Requested</button>
+                        <button type="submit" *ngIf="!isAlreadyRequested(material) && !isStocked(material)" (click)="askForRefund(material)" class="btn btn-warning btn-sm">
+                            <i class="bi bi-cash-coin"></i>
+                        </button>
+                        <button type="submit" *ngIf="!isAlreadyRequested(material) && isStocked(material)" (click)="askForRefund(material)" class="btn btn-info btn-sm">
+                            <i class="bi bi-cash"></i>
+                        </button>
+                        <button *ngIf="isAlreadyRequested(material)" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-check-circle"></i>
+                        </button>
                     </ng-container>
 
                     <ng-container *ngIf="isAdmin">
-                        <button (click)="assign(material)" class="btn btn-info btn-sm mx-1">Assign</button>
-                        <button (click)="refund(material)" class="btn btn-warning btn-sm mx-1">Refund</button>
-                        <button (click)="edit(material)" class="btn btn-secondary btn-sm mx-1">Edit</button>
-                        <button (click)="remove(material)" class="btn btn-danger btn-sm mx-1">Delete</button>
-                    </ng-container>
+                        <button *ngIf="isStocked(material)" (click)="assign(material)" class="btn btn-info btn-sm mx-1">
+                            <i class="bi bi-person-check"></i>
+                        </button>
+                        <button *ngIf="!isStocked(material)" (click)="refund(material)" class="btn btn-warning btn-sm mx-1">
+                            <i class="bi bi-cash-coin"></i>
+                        </button>
+                        <!-- <button (click)="edit(material)" class="btn btn-secondary btn-sm mx-1">
+                            <i class="bi bi-pencil"></i>
+                        </button> -->
+                        <button (click)="remove(material)" class="btn btn-danger btn-sm mx-1">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </ng-container>                    
                 </td>
             </tr>
         </tbody>

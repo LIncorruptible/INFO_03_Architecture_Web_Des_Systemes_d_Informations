@@ -116,28 +116,28 @@ router.post(
     })
 );
 
-router.post(
+router.put(
     "/assign/:id",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().assign(req, res);
     })
 );
 
-router.post(
+router.put(
     "/refund/:id",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().refund(req, res);
     })
 );
 
-router.get(
+router.delete(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().delete(req, res);
     })
 );
 
-router.get(
+router.delete(
     "/deleteAll",
     expressAsyncHandler(async (req, res) => {
         return new MaterialController().deleteAll(req, res);

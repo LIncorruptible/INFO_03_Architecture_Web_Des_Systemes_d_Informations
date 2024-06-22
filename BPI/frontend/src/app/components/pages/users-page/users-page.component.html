@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="details">
+        <user-table *ngIf="numberOfUsers > 0 && isAdmin"></user-table>
+        <not-found
+        [visible]="numberOfUsers === 0 && isAdmin"
+        notFoundMessage="No users found"
+        resetLinkText="Create a user"
+        resetLinkRoute="/users/create"
+        ></not-found>
+        <not-found
+        [visible]="!isAdmin"
+        notFoundMessage="Access denied"
+        resetLinkText="Log in as admin"
+        resetLinkRoute="/login"
+        ></not-found>
+    </div>
+</div>

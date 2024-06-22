@@ -166,4 +166,9 @@ export class OrganizationController {
         const organizations = await OrganizationModel.find({});
         return organizations[Math.floor(Math.random() * organizations.length)];
     }
+
+    getITOrganization = async () => {
+        const organization = await OrganizationModel.findOne({name: "INFORMATIQUE"}) as Organization;
+        return organization;
+    }
 }

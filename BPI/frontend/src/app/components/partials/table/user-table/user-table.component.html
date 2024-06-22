@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="details">
+        <button (click)="resetFilters()" class="btn btn-primary btn-sm mx-1">Reset</button>
+
+        <button (click)="sortByUserField('username')" class="btn btn-info btn-sm mx-1">By Username</button>
+        <button (click)="sortByUserField('email')" class="btn btn-info btn-sm mx-1">By Email</button>
+        <button (click)="sortByOrganizationField('name')" class="btn btn-info btn-sm mx-1">By Organization</button>
+        <button (click)="sortByUserField('roleScope')" class="btn btn-info btn-sm mx-1">By Role Scope</button>
+
+        <button (click)="filterByUserField('id', user.id)" class="btn btn-warning btn-sm mx-1">Only Me</button>
+        <button (click)="filterByUserField('roleScope', 'admin')" class="btn btn-warning btn-sm mx-1">Only Admin</button>
+        <button (click)="filterByUserField('roleScope', 'organization')" class="btn btn-warning btn-sm mx-1">Only Organization</button>
+        <button (click)="filterByUserField('roleScope', 'user')" class="btn btn-warning btn-sm mx-1">Only User</button>
+
+        <button (click)="create()" class="btn btn-success btn-sm mx-1">Create</button>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Assigned To</th>
+                <th scope="col">Role Scope</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.assignedTo.name }}</td>
+                <td>{{ user.roleScope }}</td>
+                <td>
+                    <ng-container *ngIf="isAdmin">
+                        <button (click)="inventory(user)" class="btn btn-primary btn-sm mx-1">
+                            <i class="bi bi-box-seam"></i>
+                        </button>
+                        <!-- <button (click)="edit(user)" class="btn btn-secondary btn-sm mx-1">Edit</button> -->
+                        <button *ngIf="!itsMe(user) && !targetIsAdmin(user)" (click)="remove(user)" class="btn btn-danger btn-sm mx-1">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </ng-container>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

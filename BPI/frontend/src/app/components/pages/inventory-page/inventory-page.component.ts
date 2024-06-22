@@ -4,6 +4,7 @@ import { MaterialService } from '../../../services/material.service';
 import { User } from '../../../shared/models/User';
 import { Material } from '../../../shared/models/Material';
 import { ROLES_SCOPES } from '../../../shared/constants/all_about_models';
+import { ActivatedRoute } from '@angular/router';
 
 const ADMIN = ROLES_SCOPES[0];
 
@@ -18,17 +19,21 @@ export class InventoryPageComponent {
   materials!: Material[];
 
   constructor(
-    materialService: MaterialService,
-    userService: UserService
+    private materialService: MaterialService,
+    private userService: UserService,
+    activatedRoute: ActivatedRoute
   ) {
     userService.userObservable.subscribe((newUser) => {
       this.user = newUser;
     });
 
-    materialService.materialsObservable.subscribe((newMaterials) => {
-      this.materials = newMaterials;
+    activatedRoute.params.subscribe((params) => {
+      this.userService.getById(params['id']).subscribe((targetUser) => {
+        this.materialService.getAccordingToUserRoleScope(targetUser).subscribe((newMaterials) => {
+          this.materials = newMaterials;
+        });
+      });
     });
-    
   }
 
   get isAdmin(): boolean {

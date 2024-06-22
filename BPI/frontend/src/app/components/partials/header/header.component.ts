@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { User } from '../../../shared/models/User';
 import { UserService } from '../../../services/user.service';
+import { ROLES_SCOPES } from '../../../shared/constants/all_about_models';
+
+const ADMIN = ROLES_SCOPES[0];
 
 @Component({
   selector: 'app-header',
@@ -22,5 +25,9 @@ export class HeaderComponent {
 
   get isAuth() {
     return this.user.token;
+  }
+
+  get isAdmin() {
+    return this.user.roleScope === ADMIN;
   }
 }

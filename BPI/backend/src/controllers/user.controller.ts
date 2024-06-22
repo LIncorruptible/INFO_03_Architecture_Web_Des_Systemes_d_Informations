@@ -190,7 +190,12 @@ export class UserController {
                 return;
             }
             await user.deleteOne();
-            res.send({ message: "User deleted" });
+            const users = await UserModel.find({});
+            if (users) {
+                res.send(users);
+            } else {
+                res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Users not found" });
+            }
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
         }
@@ -277,5 +282,10 @@ export class UserController {
     getRandom = async () => {
         const users = await UserModel.find({});
         return users[Math.floor(Math.random() * users.length)];
+    }
+
+    getStockedUser = async () => {
+        const user = await UserModel.findOne({ username: "stockedUser" }) as User;
+        return user;
     }
 }

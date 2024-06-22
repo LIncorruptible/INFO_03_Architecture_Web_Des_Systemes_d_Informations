@@ -8,10 +8,13 @@
             <nav class="left-nav">
                 <ul class="list-unstyled d-flex mb-0" *ngIf="isAuth">
                     <li class="me-3">
-                        <a routerLink="/inventory" class="text-dark text-decoration-none">Inventory</a>
+                        <a routerLink="/inventory/{{ user.id }}" class="text-dark text-decoration-none">Inventory</a>
                     </li>
                     <li>
                         <a routerLink="/requests" class="text-dark text-decoration-none">Requests</a>
+                    </li>
+                    <li *ngIf="isAdmin">
+                        <a routerLink="/users" class="text-dark text-decoration-none">Users</a>
                     </li>
                 </ul>
             </nav>

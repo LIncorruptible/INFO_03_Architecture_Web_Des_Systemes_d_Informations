@@ -43,8 +43,10 @@ export class UserSeeder {
         const users: User[] = [];
 
         const randomOrganization = await new OrganizationController().getRandom();
+        const itOrganization = await new OrganizationController().getITOrganization();
 
-        const adminRoleScope = ROLES_SCOPES.filter(scope => scope === "admin");
+        const adminRoleScope = ROLES_SCOPES.filter(scope => scope === "admin")[0];
+        const userRoleScope = ROLES_SCOPES.filter(scope => scope === "user")[0];
 
         const adminUser: User = {
             id: faker.string.uuid(),
@@ -54,10 +56,22 @@ export class UserSeeder {
             email: "johndoe@email.com",
             password: await bcrypt.hash("admin", 10),
             assignedTo: randomOrganization,
-            roleScope: adminRoleScope[0]
+            roleScope: adminRoleScope
         };
 
+        const stockUser: User = {
+            id: faker.string.uuid(),
+            firstName: "In",
+            lastName: "Stock",
+            username: "stockedUser",
+            email: "stockeduser@email.com",
+            password: await bcrypt.hash("stocked", 10),
+            assignedTo: itOrganization,
+            roleScope: userRoleScope
+        }
+
         users.push(adminUser);
+        users.push(stockUser);
 
         for (let i = 0; i < 19; i++) {
             const nonAdminRoleScope = ROLES_SCOPES.filter(scope => scope !== "ADMIN");

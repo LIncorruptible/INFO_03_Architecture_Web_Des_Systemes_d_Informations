@@ -93,7 +93,7 @@ router.delete(
     })
 );
 
-router.get(
+router.delete(
     "/deleteAll",
     expressAsyncHandler(async (req, res) => {
         return new UserController().deleteAll(req, res);
