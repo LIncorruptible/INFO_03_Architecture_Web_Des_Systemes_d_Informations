@@ -1,6 +1,15 @@
-<div>
-    <input #s type="text" placeholder="Search..." 
+<div class="search-container">
+    <input 
+        #s 
+        type="text" 
+        class="form-control form-control-sm" 
+        placeholder="Search..." 
         (keyup.enter)="search(s.value)" 
-        [value]="searchTerm">
-    <button (click)="search(s.value)">Search</button>
+        [value]="searchTerm"/>
+    <button 
+        class="btn btn-primary btn-sm" 
+        type="button" 
+        (click)="search(s.value)">
+        <i class="bi bi-search"></i>
+    </button>
 </div>

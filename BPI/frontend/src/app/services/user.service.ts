@@ -59,6 +59,10 @@ export class UserService {
         return this.http.get<User>(URLS.USERS.BY_ID + id);
     }
 
+    getBySearchTerms = (searchTerm: string) : Observable<User[]> => {
+        return this.http.get<User[]>(URLS.USERS.BY_SEARCH + searchTerm);
+    }
+
     login = (userLogin: IUserLogin) : Observable<User> => {
         return this.http.post<User>(
             URLS.USERS.LOGIN,

@@ -31,6 +31,8 @@ import { MaterialTableComponent } from './components/partials/table/material-tab
 import { ProfilePageComponent } from './components/pages/profile-page/profile-page.component';
 import { UserTableComponent } from './components/partials/table/user-table/user-table.component';
 import { UsersPageComponent } from './components/pages/users-page/users-page.component';
+import { RequestsPageComponent } from './components/pages/requests-page/requests-page.component';
+import { RequestTableComponent } from './components/partials/table/request-table/request-table.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { UsersPageComponent } from './components/pages/users-page/users-page.com
     MaterialTableComponent,
     ProfilePageComponent,
     UserTableComponent,
-    UsersPageComponent
+    UsersPageComponent,
+    RequestsPageComponent,
+    RequestTableComponent
   ],
   imports: [
     BrowserModule,

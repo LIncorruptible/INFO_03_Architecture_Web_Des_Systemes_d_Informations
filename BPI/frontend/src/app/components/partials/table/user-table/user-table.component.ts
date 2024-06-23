@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { User } from '../../../../shared/models/User';
 import { UserService } from '../../../../services/user.service';
 import { ROLES_SCOPES } from '../../../../shared/constants/all_about_models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Organization } from '../../../../shared/models/Organization';
 
 const ADMIN = ROLES_SCOPES[0];
@@ -18,14 +18,24 @@ export class UserTableComponent {
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.userService.userObservable.subscribe((newUser) => {
       this.user = newUser;
     });
 
-    this.userService.usersObservable.subscribe((newUsers) => {
-      this.users = newUsers;
+    this.activatedRoute.params.subscribe((params) => {
+      if (params['searchTerm']) {
+        this.userService.getBySearchTerms(params['searchTerm']).subscribe((newUsers) => {
+          this.users = newUsers;
+        });
+      }
+      else {
+        this.userService.getAll().subscribe((newUsers) => {
+          this.users = newUsers;
+        });
+      }
     });
   }
 

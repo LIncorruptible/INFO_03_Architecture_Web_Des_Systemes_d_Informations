@@ -14,26 +14,24 @@ import { FormControl, FormControlState } from '@angular/forms';
 
 const ADMIN = ROLES_SCOPES[0];
 
-const ASSIGNMENT = REQUEST_TYPES[0];
 const RETURN = REQUEST_TYPES[1];
+const ASSIGNMENT = REQUEST_TYPES[0];
 
 const DEFAULT_SELECTED_CHOICE = "ALL";
 
 const STOCKED = MATERIAL_STATUS[0];
+const USED = MATERIAL_STATUS[1];
 
 @Component({
   selector: 'material-table',
   templateUrl: './material-table.component.html',
   styleUrl: './material-table.component.css'
 })
-export class MaterialTableComponent implements OnInit {
+export class MaterialTableComponent {
 
   user!: User;
 
   materials!: Material[];
-  
-  requests!: RequestModel[];
-  requestsSubscription!: Subscription;
 
   selectedTag: string = DEFAULT_SELECTED_CHOICE;
   selectedStatus: string = DEFAULT_SELECTED_CHOICE;
@@ -68,17 +66,11 @@ export class MaterialTableComponent implements OnInit {
       });
     });
 
-    this.selecterControl.reset(DEFAULT_SELECTED_CHOICE);
-  }
-
-  ngOnInit(): void {
-    this.requestsSubscription = this.requestService.requests.subscribe((newRequests) => {
-      this.requests = newRequests;
+    this.requestService.getAccordingToCurrentUser().subscribe((newRequests) => {
+      this.requestService.requests = newRequests;
     });
-  }
 
-  ngOnDestroy(): void {
-    this.requestsSubscription.unsubscribe();
+    this.selecterControl.reset(DEFAULT_SELECTED_CHOICE);
   }
 
   get isAdmin(): boolean {
@@ -90,16 +82,13 @@ export class MaterialTableComponent implements OnInit {
   }
 
   isStocked(material: Material): boolean {
-    return material.status === STOCKED;
+    return material.status !== USED;
   }
 
   create() {
     throw new Error('Method not implemented.');
   }
 
-  request() {
-    throw new Error('Method not implemented');
-  }
 
   remove(material: Material) {
     this.materialService.remove(material).subscribe(() => {
@@ -110,14 +99,20 @@ export class MaterialTableComponent implements OnInit {
   assign(material: Material) {
     throw new Error('Method not implemented.');
   }
+
+  request(material: Material) {
+    this.requestService.askFor(material, this.user, ASSIGNMENT).subscribe((request) => {
+      this.requestService.getAccordingToCurrentUser().subscribe((newRequests) => {
+        this.requestService.requests = newRequests;
+      });
+    });
+  }
     
   askForRefund(material: Material) {
-    this.requestService.askFor(material, this.user, RETURN).subscribe({
-      next: (request) => {
-        this.requestService.updateRequestsSubject([...this.requests, request]);
-      },
-      error: (errorResponse) => {
-      }
+    this.requestService.askFor(material, this.user, RETURN).subscribe((request) => {
+      this.requestService.getAccordingToCurrentUser().subscribe((newRequests) => {
+        this.requestService.requests = newRequests;
+      });
     });
   }
 

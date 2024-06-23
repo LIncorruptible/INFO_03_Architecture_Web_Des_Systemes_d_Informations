@@ -75,42 +75,35 @@ router.post(
     })
 );
 
-router.post(
-    "/update/:id",
+router.put(
+    "/update",
     expressAsyncHandler(async (req, res) => {
         await requestController.update(req, res);
     })
 );
 
-router.post(
+router.get(
     "/approve/:id",
     expressAsyncHandler(async (req, res) => {
-        await requestController.approve(req, res);
+        return await requestController.approve(req, res);
     })
 );
 
 router.get(
-    "/approve/:id",
-    expressAsyncHandler(async (req, res) => {
-        await requestController.approve(req, res);
-    })
-);
-
-router.post(
     "/reject/:id",
     expressAsyncHandler(async (req, res) => {
-        await requestController.reject(req, res);
+        return await requestController.reject(req, res);
     })
 );
 
-router.get(
+router.delete(
     "/delete/:id",
     expressAsyncHandler(async (req, res) => {
         await requestController.delete(req, res);
     })
 );
 
-router.get(
+router.delete(
     "/deleteAll",
     expressAsyncHandler(async (req, res) => {
         await requestController.deleteAll(req, res);

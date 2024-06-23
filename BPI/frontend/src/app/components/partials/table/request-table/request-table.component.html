@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="details">
+        <button (click)="resetFilters()" class="btn btn-primary btn-sm mx-1">Reset</button>
+
+        <!-- <app-search searchIn="requests"></app-search> -->
+
+        <button (click)="sortByMaterialField('name')" class="btn btn-info btn-sm mx-1">Material</button>
+        <button (click)="sortByRequestField('type')" class="btn btn-info btn-sm mx-1">Type</button>
+        <button (click)="sortByRequestField('status')" class="btn btn-info btn-sm mx-1">Status</button>
+        <button (click)="sortByRequestField('date')" class="btn btn-info btn-sm mx-1">Date</button>
+
+        <div class="selecter">
+            <label>Status</label>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" [formControl]="selecterControl" (change)="getStatusSelection($event)">
+                <option >ALL</option>
+                <option *ngFor="let stat of status">{{ stat }}</option>
+            </select>
+        </div>
+
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Requester</th>
+                <th scope="col">Material</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let request of requests">
+                <td>{{ request.requester.firstName }} {{ request.requester.lastName }}</td>
+                <td>{{ request.material.name }}</td>
+                <td>{{ request.type }}</td>
+                <td>{{ request.status }}</td>
+                <td>{{ request.date | date }}</td>
+                <td>
+                    <ng-container *ngIf="isAdmin">
+                        <!-- <button (click)="edit(request)" class="btn btn-secondary btn-sm mx-1">
+                            <i class="bi bi-pencil"></i>
+                        </button> -->
+                        <button (click)="approve(request)" class="btn btn-success btn-sm mx-1" *ngIf="isPending(request)">
+                            <i class="bi bi-check"></i>
+                        </button>
+                        <button (click)="reject(request)" class="btn btn-danger btn-sm mx-1" *ngIf="isPending(request)">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </ng-container>
+                    
+                    <button *ngIf="isAdmin || isPending(request)" (click)="remove(request)" class="btn btn-danger btn-sm mx-1">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

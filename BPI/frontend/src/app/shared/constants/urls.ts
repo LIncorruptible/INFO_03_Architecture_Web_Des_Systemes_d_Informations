@@ -62,7 +62,9 @@ export const URLS = {
         BY_MATERIAL: `${BASE_URL}/api/requests/material/`,
         BY_ORGANIZATION: `${BASE_URL}/api/requests/organization/`,
         ADD: `${BASE_URL}/api/requests/add`,
-        UPDATE: `${BASE_URL}/api/requests/update/`,
-        DELETE: `${BASE_URL}/api/requests/delete/`
+        UPDATE: `${BASE_URL}/api/requests/update`,
+        DELETE: `${BASE_URL}/api/requests/delete/`,
+        APPROVE: `${BASE_URL}/api/requests/approve/`,
+        REJECT: `${BASE_URL}/api/requests/reject/`
     }
 };

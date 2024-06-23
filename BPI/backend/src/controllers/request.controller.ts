@@ -5,12 +5,15 @@ import { RequestSeeder } from "../seeders/request.seeder";
 
 import { Request as CustomRequest } from "../models/request.model";
 import { MaterialController } from "./material.controller";
-import { REQUEST_STATUS } from "../constants/all_about_models";
+import { MATERIAL_STATUS, REQUEST_STATUS } from "../constants/all_about_models";
 import { UserModel } from "../models/user.model";
+import { MaterialModel } from "../models/material.model";
 
 const PENDING = REQUEST_STATUS[0];
 const APPROVED = REQUEST_STATUS[1];
 const DECLINED = REQUEST_STATUS[2];
+
+const USED = MATERIAL_STATUS[1];
 
 export class RequestController {
 
@@ -183,7 +186,7 @@ export class RequestController {
     }
 
     update = async (req: Request, res: Response) => {
-        const request = await RequestModel.findById(req.params.id);
+        const request = req.body.request;
         if (request) {
             const { requester, material, type, status, date } = req.body;
             if (await this.isAlreadyExists({ requester, material, type, status } as CustomRequest)) {
@@ -209,14 +212,28 @@ export class RequestController {
     }
 
     approve = async (req: Request, res: Response) => {
-        const request = await RequestModel.findById(req.params.id);
+        const request = await RequestModel
+            .findById(req.params.id)
+            .populate('requester')
+            .populate('material');
         if (request) {
             request.status = APPROVED;
             const updatedRequest = await request.save();
             if (updatedRequest) {
-                req.body = { user: request.requester };
-                new MaterialController().assign(req, res);
-                res.send(updatedRequest);
+                const material = await MaterialModel.findById(updatedRequest.material);
+                if (material) {
+                    material.assignedTo = updatedRequest.requester;
+                    material.status = USED;
+                    const updatedMaterial = await material.save();
+
+                    if (updatedMaterial) {
+                        res.send(updatedRequest);
+                    } else {
+                        res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating material status" });
+                    }
+                } else {
+                    res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating material status" });
+                }
             } else {
                 res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error approving request" });
             }
@@ -226,16 +243,17 @@ export class RequestController {
     }
 
     reject = async (req: Request, res: Response) => {
-        const request = await RequestModel.findById(req.params.id);
+        const request = await RequestModel
+            .findById(req.params.id)
+            .populate('requester')
+            .populate('material');
         if (request) {
             request.status = DECLINED;
             const updatedRequest = await request.save();
             if (updatedRequest) {
-                req.params.id = request.material.id;
-                new MaterialController().refund(req, res);
                 res.send(updatedRequest);
             } else {
-                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error declining request" });
+                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error rejecting request" });
             }
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Request not found" });

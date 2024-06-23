@@ -54,13 +54,23 @@
                 <td>{{ material.returnDeadline | date:'shortDate' }}</td>
                 <td>
                     <ng-container *ngIf="!isAdmin">
-                        <button type="submit" *ngIf="!isAlreadyRequested(material) && !isStocked(material)" (click)="askForRefund(material)" class="btn btn-warning btn-sm">
+                        <ng-container *ngIf="!isAlreadyRequested(material)">
+                            <button type="submit" 
+                            *ngIf="!isStocked(material)" 
+                            (click)="askForRefund(material)" 
+                            class="btn btn-warning btn-sm">
                             <i class="bi bi-cash-coin"></i>
-                        </button>
-                        <button type="submit" *ngIf="!isAlreadyRequested(material) && isStocked(material)" (click)="askForRefund(material)" class="btn btn-info btn-sm">
-                            <i class="bi bi-cash"></i>
-                        </button>
-                        <button *ngIf="isAlreadyRequested(material)" class="btn btn-secondary btn-sm">
+                            </button>
+                            <button type="submit" 
+                                *ngIf="isStocked(material)" 
+                                (click)="request(material)" 
+                                class="btn btn-info btn-sm">
+                                <i class="bi bi-cash"></i>
+                            </button>
+                        </ng-container>
+                        <button 
+                            *ngIf="isAlreadyRequested(material)" 
+                            class="btn btn-secondary btn-sm">
                             <i class="bi bi-check-circle"></i>
                         </button>
                     </ng-container>

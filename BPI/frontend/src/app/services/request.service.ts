@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Request as RequestModel } from '../shared/models/Request';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -24,21 +24,16 @@ const PENDING = REQUEST_STATUS[0];
 export class RequestService {
 
   user!: User;
-  requestsSubject = new BehaviorSubject<RequestModel[]>([]);
-  requests = this.requestsSubject.asObservable();
+  
+  requests!: RequestModel[];
+  requestsObservable: Observable<RequestModel[]> = new Observable<RequestModel[]>();
 
   constructor(
     private http: HttpClient,
     private userService: UserService,
     private toastrService: ToastrService
   ) {
-    this.userService.userObservable.subscribe((newUser) => {
-      this.user = newUser;
-    });
-
-    this.getAccordingToCurrentUser().subscribe((newRequests) => {
-      this.requestsSubject.next(newRequests);
-    });
+    this.user = this.userService.currentUser();
   }
 
   getAll(): Observable<RequestModel[]> {
@@ -51,6 +46,10 @@ export class RequestService {
 
   getByUser(user: User): Observable<RequestModel[]> {
     return this.http.get<RequestModel[]>(URLS.REQUESTS.BY_REQUESTER + user.id);
+  }
+
+  getByMaterial(material: Material): Observable<RequestModel[]> {
+    return this.http.get<RequestModel[]>(URLS.REQUESTS.BY_MATERIAL + material.id);
   }
   
   getAccordingToCurrentUser(): Observable<RequestModel[]> {
@@ -74,8 +73,6 @@ export class RequestService {
       tap({
         next: (request) => {
           this.toastrService.success('Request sent');
-          const currentRequests = this.requestsSubject.value;
-          this.requestsSubject.next([...currentRequests, request]);
         },
         error: (errorResponse) => {
           this.toastrService.error(
@@ -87,20 +84,65 @@ export class RequestService {
     );
   }
 
-  updateRequestsSubject = (requests: RequestModel[]) => {
-    this.requestsSubject.next(requests);
+  remove = (request: RequestModel): Observable<RequestModel> => {
+    return this.http.delete<RequestModel>(
+      URLS.REQUESTS.DELETE + request.id
+    ).pipe(
+      tap({
+        next: (request) => {
+          this.toastrService.success('Request removed');
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(
+            'Request removal failed' 
+            + ' ' + (errorResponse as HttpErrorResponse).error.message
+          );
+        }
+      })
+    );
+  
   }
 
   isAlreadyRequested(material: Material): boolean {
-
-    if (!this.requestsSubject.value) return false;
-    
-    for (let request of this.requestsSubject.value) {
-      if (request.material.id === material.id && request.status === PENDING) {
-        return true;
-      }
+    if (this.requests) {
+      return this.requests.some((request) => request.material.id === material.id && request.status === PENDING);
     }
-
     return false;
+  }
+
+  approve = (request: RequestModel): Observable<RequestModel> => {
+    return this.http.get<RequestModel>(
+      URLS.REQUESTS.APPROVE + request.id
+    ).pipe(
+      tap({
+        next: (request) => {
+          this.toastrService.success('Request approved');
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(
+            'Request approval failed' 
+            + ' ' + (errorResponse as HttpErrorResponse).error.message
+          );
+        }
+      })
+    );
+  }
+
+  reject = (request: RequestModel): Observable<RequestModel> => {
+    return this.http.get<RequestModel>(
+      URLS.REQUESTS.REJECT + request.id
+    ).pipe(
+      tap({
+        next: (request) => {
+          this.toastrService.success('Request rejected');
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(
+            'Request rejection failed' 
+            + ' ' + (errorResponse as HttpErrorResponse).error.message
+          );
+        }
+      })
+    );
   }
 }

@@ -4,7 +4,7 @@ import { Tag } from '../shared/models/Tag';
 import { Material } from '../shared/models/Material';
 import { URLS } from '../shared/constants/urls';
 import { User } from '../shared/models/User';
-import { forkJoin, Observable, tap } from 'rxjs';
+import { forkJoin, Observable, Subscription, tap } from 'rxjs';
 import { Organization } from '../shared/models/Organization';
 import { MATERIAL_STATUS, ROLES_SCOPES } from '../shared/constants/all_about_models';
 import { ToastrService } from 'ngx-toastr';
@@ -26,6 +26,7 @@ export class MaterialService {
     private http:HttpClient,
     private toastrService:ToastrService
   ) {   
+
   }
 
   getAll(): Observable<Material[]> {
@@ -56,9 +57,10 @@ export class MaterialService {
     return this.getByUser(user);
   }
 
-  assign(material: Material): Observable<Material> {
+  assign(material: Material, user: User): Observable<Material> {
     return this.http.put<Material>(
-      URLS.MATERIALS.ASSIGN + material.id, material
+      URLS.MATERIALS.ASSIGN + material.id,
+      user
     ).pipe(
       tap(
         {

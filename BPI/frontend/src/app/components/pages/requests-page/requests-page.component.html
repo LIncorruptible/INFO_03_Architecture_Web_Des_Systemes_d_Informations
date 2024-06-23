@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="details">
+        <request-table 
+        *ngIf="numberOfRequests && numberOfRequests > 0"
+        ></request-table>
+        <not-found
+        [visible]="!numberOfRequests || numberOfRequests === 0"
+        notFoundMessage="No requests found"
+        resetLinkText="Request a material"
+        ></not-found>
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { LoginPageComponent } from './components/pages/login-page/login-page.com
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
 import { UsersPageComponent } from './components/pages/users-page/users-page.component';
+import { RequestsPageComponent } from './components/pages/requests-page/requests-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -12,6 +13,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterPageComponent},
   { path: 'inventory/:id', component: InventoryPageComponent},
   { path: 'users', component: UsersPageComponent},
+  { path: 'users/search/:searchTerm', component: UsersPageComponent},
+  { path: 'requests', component: RequestsPageComponent},
 ];
 
 @NgModule({

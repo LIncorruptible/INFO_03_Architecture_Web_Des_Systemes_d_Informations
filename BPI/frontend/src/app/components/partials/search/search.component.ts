@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -7,7 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
+  
   searchTerm: string = '';
+  @Input() searchIn!: string;
 
   constructor(route:ActivatedRoute, private router: Router) {
     route.params.subscribe(params => {
@@ -18,6 +20,6 @@ export class SearchComponent {
   }
 
   search(term:string):void {
-    this.router.navigate([`/search/${term}`]);
+    this.router.navigate([`${this.searchIn}/search/${term}`]);
   }
 }
