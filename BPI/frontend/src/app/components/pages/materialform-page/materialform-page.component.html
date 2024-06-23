@@ -1,6 +1,8 @@
 <div class="container mt-3">
     <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
 
+        <h2>New material</h2>
+
         <text-input
         [control]="fc['name']"
         [showErrorsWhen]="isSubmitted"
