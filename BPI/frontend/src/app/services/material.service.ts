@@ -57,6 +57,14 @@ export class MaterialService {
     return this.getByUser(user);
   }
 
+  isAssignable(materiel: Material, user: User) {
+    if (materiel.forOrganization) {
+      return user.roleScope === ADMIN || user.roleScope === ORGANIZATION;
+    }
+
+    return true;
+  }
+
   assign(material: Material, user: User): Observable<Material> {
     return this.http.put<Material>(
       URLS.MATERIALS.ASSIGN + material.id,

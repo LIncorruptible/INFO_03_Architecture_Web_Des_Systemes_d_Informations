@@ -57,20 +57,50 @@ export class RequestTableComponent {
     })
   }
 
-  filterByRequestField(field: keyof RequestModel, value: string) {
-  throw new Error('Method not implemented.');
-  }
-
   sortByRequestField(field: keyof RequestModel) {
-    throw new Error('Method not implemented.');
+    this.requests.sort((a, b) => {
+      const aValue = a[field];
+      const bValue = b[field];
+  
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue);
+      }
+  
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return aValue - bValue;
+      }
+
+      if (aValue instanceof Date && bValue instanceof Date) {
+        return aValue.getTime() - bValue.getTime();
+      }
+  
+      return String(aValue).localeCompare(String(bValue));
+    });
   }
 
   sortByMaterialField(field: keyof Material) {
-    throw new Error('Method not implemented.');
+    this.requests.sort((a, b) => {
+      const aValue = a.material[field];
+      const bValue = b.material[field];
+  
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue);
+      }
+  
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return aValue - bValue;
+      }
+  
+      return String(aValue).localeCompare(String(bValue));
+    });
   }
 
   resetFilters() {
-    throw new Error('Method not implemented.');
+    this.requestService.getAccordingToCurrentUser().subscribe((newRequests) => {
+      this.requests = newRequests;
+    });
+
+    this.selecterControl.reset(DEFAULT_SELECTED_CHOICE);
   }
 
   getEventTargetValue($event: Event) {
@@ -85,9 +115,17 @@ export class RequestTableComponent {
   filterByAllSelections() {
     this.requestService.getAccordingToCurrentUser().subscribe((newRequests) => {
       this.requests = newRequests.filter((request) => {
-        return this.selectedStatus === DEFAULT_SELECTED_CHOICE || request.material.status === this.selectedStatus;
+        return this.filterByStatus(request);
       });
     });
+  }
+
+  filterByStatus(request: RequestModel) {
+    if (this.selectedStatus === DEFAULT_SELECTED_CHOICE) {
+      return true;
+    }
+
+    return request.status === this.selectedStatus;
   }
 
   reject(request: RequestModel) {

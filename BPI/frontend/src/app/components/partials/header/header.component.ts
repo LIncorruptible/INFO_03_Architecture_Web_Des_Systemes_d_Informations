@@ -14,7 +14,9 @@ export class HeaderComponent {
   user!:User;
 
   constructor(private userService:UserService) {
-    this.user = this.userService.currentUser();
+    this.userService.userObservable.subscribe((newUser) => {
+      this.user = newUser;
+    });
   }
 
   logout() {

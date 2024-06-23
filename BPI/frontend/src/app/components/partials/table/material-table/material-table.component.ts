@@ -101,6 +101,16 @@ export class MaterialTableComponent {
     });
   }
 
+  isAssignable(material: Material): boolean {
+    this.activatedRoute.params.subscribe((params) => {
+      this.userService.getById(params['id']).subscribe((targetUser) => {
+        return this.materialService.isAssignable(material, targetUser);
+      });
+    });
+
+    return false;
+  }
+
   assign(material: Material) {
     const userId = this.activatedRoute.snapshot.params['id'];
     if (userId) {
@@ -182,8 +192,8 @@ export class MaterialTableComponent {
 
   sortByTagField(field: keyof Tag) {
     this.materials.sort((a, b) => {
-      const aValue = a.assignedTo ? a.taggedAs[field] : '';
-      const bValue = b.assignedTo ? b.taggedAs[field] : '';
+      const aValue = a.taggedAs[field];
+      const bValue = b.taggedAs[field];
   
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return aValue.localeCompare(bValue);
