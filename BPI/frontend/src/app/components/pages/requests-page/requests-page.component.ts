@@ -16,6 +16,8 @@ export class RequestsPageComponent {
   user!: User;
   requests!: RequestModel[];
 
+  returnUrl!: string;
+
   constructor(
     private userService: UserService,
     private requestService: RequestService

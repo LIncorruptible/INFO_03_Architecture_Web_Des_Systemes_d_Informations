@@ -1,9 +1,11 @@
 <div class="container mt-3">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
-        <h2>New user</h2>
+        <h2>
+            {{ isForCreate ? 'Create' : 'Update' }} User
+        </h2>
 
-        <input-container label="Role">
+        <input-container label="Role" *ngIf="isForCreate">
             <select [formControl]="$any(fc['roleScope'])" class="role-select form-control" name="role-select" [(ngModel)]="nrSelect">
                 <option value="" disabled>Select Role</option>
                 <option *ngFor="let role of roles" [ngValue]="role">{{ role }}</option>
@@ -30,15 +32,29 @@
         type="email">
         </text-input>
       
-        <select-input
+        <select-input *ngIf="isForCreate"
         [control]="fc['assignedTo']"
         [showErrorsWhen]="isSubmitted"
         label="Organization"
         typeObj="organization"
         viewValue="name">
         </select-input>
+
+        <text-input *ngIf="!isForCreate"
+        [control]="fc['password']"
+        [showErrorsWhen]="isSubmitted"
+        label="Password"
+        type="password">
+        </text-input>
+
+        <text-input *ngIf="!isForCreate"
+        [control]="fc['confirmedPassword']"
+        [showErrorsWhen]="isSubmitted"
+        label="Confirm Password"
+        type="password">
+        </text-input>
   
-      <default-button text="Create"></default-button>
+      <default-button [text]="(isForCreate) ? 'Create' : 'Apply'"></default-button>
     </form>
   </div>
   

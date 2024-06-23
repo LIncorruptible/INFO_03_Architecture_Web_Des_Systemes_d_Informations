@@ -24,7 +24,7 @@
                         <a routerLink="/login" class="text-dark text-decoration-none pe-3">Login</a>
                     </li>
                     <li *ngIf="isAuth" class="username me-3">
-                        {{ user.username }}
+                        <a routerLink="/profile" class="text-dark text-decoration-none pe-3">{{ user.username }}</a>
                     </li>
                     <li *ngIf="isAuth">
                         <a (click)="logout()" routerLink="/" class="text-dark text-decoration-none pe-3">Logout</a>

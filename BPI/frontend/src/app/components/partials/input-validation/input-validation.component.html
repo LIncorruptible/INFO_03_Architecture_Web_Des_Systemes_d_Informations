@@ -1,4 +1,4 @@
-<div class="alert alert-danger error-list" *ngIf="errorMessages && showErrorsWhen">
+<div class="alert alert-danger error-list" *ngIf="errorMessages.length > 0 && showErrorsWhen">
     <div *ngFor="let errorMessage of errorMessages">
         {{ errorMessage }}
     </div>

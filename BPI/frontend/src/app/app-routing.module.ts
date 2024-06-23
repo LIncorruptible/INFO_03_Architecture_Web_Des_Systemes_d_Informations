@@ -18,7 +18,8 @@ const routes: Routes = [
   { path: 'users/search/:searchTerm', component: UsersPageComponent},
   { path: 'requests', component: RequestsPageComponent},
   { path: 'materials/add', component: MaterialformPageComponent},
-  { path: 'users/add', component: UserformPageComponent},
+  { path: 'users/add', component: UserformPageComponent, data: { isForCreate: true } },
+  { path: 'profile', component: UserformPageComponent, data: { isForCreate: false } },
 ];
 
 @NgModule({

@@ -5,15 +5,17 @@ import { RequestSeeder } from "../seeders/request.seeder";
 
 import { Request as CustomRequest } from "../models/request.model";
 import { MaterialController } from "./material.controller";
-import { MATERIAL_STATUS, REQUEST_STATUS } from "../constants/all_about_models";
-import { UserModel } from "../models/user.model";
-import { MaterialModel } from "../models/material.model";
+import { MATERIAL_STATUS, REQUEST_STATUS, ROLES_SCOPES } from "../constants/all_about_models";
+import { User, UserModel } from "../models/user.model";
+import { Material, MaterialModel } from "../models/material.model";
 
 const PENDING = REQUEST_STATUS[0];
 const APPROVED = REQUEST_STATUS[1];
 const DECLINED = REQUEST_STATUS[2];
 
 const USED = MATERIAL_STATUS[1];
+
+const USER = ROLES_SCOPES[2];
 
 export class RequestController {
 
@@ -159,29 +161,34 @@ export class RequestController {
     } 
     
     add = async (req: Request, res: Response) => {
-        console.log('Creating request')
-        const { requester, material, type } = req.body;
-        console.log('body : ' + JSON.stringify(req.body))
+        let { requester, material, type } = req.body;
 
-        const request = new RequestModel({
-            requester: requester,
-            material: material,
-            type: type,
-            status: PENDING,
-            date: new Date().getDate()
-        });
+        requester = await UserModel.findById(requester);
+        material = await MaterialModel.findById(material);
 
-        if (await this.isAlreadyExists(request)) {
-            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Request already exists" });
-            return;
-        }
-
-        const createdRequest = await RequestModel.create(request);
-
-        if (createdRequest) {
-            res.status(HTTP_STATUS.CREATED).send(createdRequest);
+        if (material.forOrganization && requester.roleScope === USER) {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User cannot request for organization" });
         } else {
-            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating request" });
+            const request = new RequestModel({
+                requester: requester,
+                material: material,
+                type: type,
+                status: PENDING,
+                date: new Date()
+            });
+    
+            if (await this.isAlreadyExists(request)) {
+                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Request already exists" });
+                return;
+            }
+    
+            const createdRequest = await RequestModel.create(request);
+    
+            if (createdRequest) {
+                res.status(HTTP_STATUS.CREATED).send(createdRequest);
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error creating request" });
+            }
         }
     }
 

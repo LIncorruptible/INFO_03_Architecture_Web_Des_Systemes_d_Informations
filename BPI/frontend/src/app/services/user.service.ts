@@ -8,6 +8,7 @@ import { IUserLogin } from '../shared/interface/IUserLogin';
 import { URLS } from '../shared/constants/urls';
 import { IUserRegister } from '../shared/interface/IUserRegister';
 import { INewUser } from '../shared/interface/INewUser';
+import { IEditUser } from '../shared/interface/IEditUser';
 
 const USER_KEY = "User";
 
@@ -106,7 +107,7 @@ export class UserService {
                 },
                 error: (errorResponse) => {
                     this.toastrService.error(
-                        'Registration failed' 
+                        'Registration failed ' 
                         + (errorResponse as HttpErrorResponse).error.message
                     );
                 }
@@ -125,7 +126,28 @@ export class UserService {
                 },
                 error: (errorResponse) => {
                     this.toastrService.error(
-                        'User creation failed' 
+                        'User creation failed ' 
+                        + (errorResponse as HttpErrorResponse).error.message
+                    );
+                }
+            })
+        );
+    }
+
+    edit = (user: IEditUser): Observable<User> => {
+        return this.http.put<User>(
+            URLS.USERS.UPDATE + this.getUserLocalStorage().id,
+            { user: user }
+        ).pipe(
+            tap({
+                next: (user) => {
+                    this.setUserLocalStorage(user);
+                    this.userSubject.next(user);
+                    this.toastrService.success('User edited');
+                },
+                error: (errorResponse) => {
+                    this.toastrService.error(
+                        'User edition failed ' 
                         + (errorResponse as HttpErrorResponse).error.message
                     );
                 }

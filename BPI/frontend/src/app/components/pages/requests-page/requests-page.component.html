@@ -7,6 +7,7 @@
         [visible]="!numberOfRequests || numberOfRequests === 0"
         notFoundMessage="No requests found"
         resetLinkText="Request a material"
+        [resetLinkRoute]="'/inventory/' + user.id"
         ></not-found>
     </div>
 </div>

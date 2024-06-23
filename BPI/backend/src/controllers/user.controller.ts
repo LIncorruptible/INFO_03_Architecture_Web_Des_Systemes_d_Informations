@@ -128,6 +128,23 @@ export class UserController {
         return !!userByUsername || !!userByEmail;
     }
 
+    private isAlreadyExistsWithoutSpecifiedUser = async (username: string, email: string, user: User) => {
+        const userId = new mongoose.Types.ObjectId(user.id);
+    
+        const userByUsername = await UserModel.findOne({
+            username,
+            _id: { $ne: userId }
+        });
+    
+        const userByEmail = await UserModel.findOne({
+            email,
+            _id: { $ne: userId }
+        });
+        
+        return !!userByUsername || !!userByEmail;
+    }
+    
+
     add = async (req: Request, res: Response) => {
         const { firstName, lastName, email, assignedTo, roleScope } = req.body;
         if (await this.isAlreadyExists("", email)) {
@@ -155,28 +172,31 @@ export class UserController {
     }
 
     update = async (req: Request, res: Response) => {
-        const user = await UserModel.findById(req.params.id);
-        if (user) {
-            const { username, email, password, firstName, lastName, assignedTo, roleScope } = req.body;
-            if (await this.isAlreadyExists(username, email)) {
-                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User already exists" });
-                return;
-            }
-            user.username = username || user.username;
-            user.email = email || user.email;
-            user.password = password || user.password;
-            user.firstName = firstName || user.firstName;
-            user.lastName = lastName || user.lastName;
-            user.assignedTo = assignedTo || user.assignedTo;
-            user.roleScope = roleScope || user.roleScope;
-            const updatedUser = await user.save();
-            if (updatedUser) {
-                res.send(updatedUser);
-            } else {
-                res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating user" });
-            }
-        } else {
+        const targetUser = await UserModel.findById(req.params.id);
+        const { user } = req.body;
+        const username = `${user.firstName.toLowerCase()}${user.lastName.toLowerCase()}`;
+
+        if (!targetUser) {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "User not found" });
+            return;
+        }
+
+        if (await this.isAlreadyExistsWithoutSpecifiedUser(username, user.email, targetUser)) {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User already exists" });
+            return;
+        }
+
+        if (user.firstName != '') targetUser.firstName = user.firstName[0].toUpperCase() + user.firstName.slice(1);
+        if (user.lastName != '') targetUser.lastName = user.lastName.toUpperCase();
+        targetUser.username = username;
+        if (user.email != '') targetUser.email = user.email;
+        if (user.password != '') targetUser.password = await bcrypt.hash(user.password, 10);
+
+        const updatedUser = await targetUser.save();
+        if (updatedUser) {
+            res.send(this.generateTokenReponse(updatedUser));
+        } else {
+            res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "Error updating user" });
         }
     }
 
