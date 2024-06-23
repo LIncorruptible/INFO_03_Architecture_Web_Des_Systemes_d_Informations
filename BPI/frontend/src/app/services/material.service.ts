@@ -9,6 +9,7 @@ import { Organization } from '../shared/models/Organization';
 import { MATERIAL_STATUS, ROLES_SCOPES } from '../shared/constants/all_about_models';
 import { ToastrService } from 'ngx-toastr';
 import { error } from 'console';
+import { INewMaterial } from '../shared/interface/INewMaterial';
 
 const ADMIN = ROLES_SCOPES[0];
 const ORGANIZATION = ROLES_SCOPES[1];
@@ -120,6 +121,27 @@ export class MaterialService {
               'Material deletion failed ' 
               + (errorResponse as HttpErrorResponse).error.message
           );
+          }
+        }
+      )
+    );
+  }
+
+  create(material: INewMaterial): Observable<Material> {
+    return this.http.post<Material>(
+      URLS.MATERIALS.ADD, 
+      { material: material }
+    ).pipe(
+      tap(
+        {
+          next: (material) => {
+            this.toastrService.success("Material created successfully");
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            this.toastrService.error(
+              'Material creation failed ' 
+              + (errorResponse as HttpErrorResponse).error.message
+            );
           }
         }
       )

@@ -1,8 +1,9 @@
-<div class="form-group input-container" [ngClass]="{'has-error': control.invalid && showErrorsWhen}">
-    <label>{{ label }}</label>
-    <input class="form-control" [type]="type" [placeholder]="label" [formControl]="formControl">
-    <input-validation
-        [control]="control"
-        [showErrorsWhen]="showErrorsWhen">
-    </input-validation>
-</div>
+<input-container [label]="label">
+    <div class="form-group" [ngClass]="{'has-error': control.invalid && showErrorsWhen}">
+        <input class="form-control" [type]="type" [placeholder]="label" [formControl]="formControl">
+        <input-validation
+            [control]="control"
+            [showErrorsWhen]="showErrorsWhen">
+        </input-validation>
+    </div>
+</input-container>

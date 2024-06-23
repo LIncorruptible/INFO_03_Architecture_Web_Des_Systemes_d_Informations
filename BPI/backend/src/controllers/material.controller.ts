@@ -204,15 +204,21 @@ export class MaterialController {
     }
 
     add = async (req: Request, res: Response) => {
-        const { name, taggedAs, status, assignedTo, renewalDate, returnDeadline } = req.body;
-        const material = new MaterialModel({
+        const { name, taggedAs, forOrganization } = req.body.material;
+
+        let material = new MaterialModel({
             name,
             taggedAs,
-            status,
-            assignedTo,
-            renewalDate,
-            returnDeadline
+            forOrganization
         });
+
+        const stockedUser = await UserModel.findOne({ username: "stockedUser" }) as User;
+
+        material.assignedTo = stockedUser;
+        material.status = STOCKED;
+        material.renewalDate = new Date();
+        material.returnDeadline = new Date();
+
         const createdMaterial = await material.save();
         if (createdMaterial) {
             res.status(HTTP_STATUS.CREATED).send(createdMaterial);

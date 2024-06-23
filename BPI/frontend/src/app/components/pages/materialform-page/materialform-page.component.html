@@ -1,0 +1,27 @@
+<div class="container mt-3">
+    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+
+        <text-input
+        [control]="fc['name']"
+        [showErrorsWhen]="isSubmitted"
+        label="Name">
+        </text-input>
+      
+        <select-input
+        [control]="fc['taggedAs']"
+        [showErrorsWhen]="isSubmitted"
+        label="Tag"
+        typeObj="tag"
+        viewValue="name">
+        </select-input>
+
+        <checkbox-input
+        [control]="fc['forOrganization']"
+        [showErrorsWhen]="isSubmitted"
+        label="For organization">
+        </checkbox-input>
+  
+      <default-button text="Create"></default-button>
+    </form>
+  </div>
+  

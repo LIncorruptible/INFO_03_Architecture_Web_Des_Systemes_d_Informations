@@ -2,15 +2,14 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'text-input',
-  templateUrl: './text-input.component.html',
-  styleUrl: './text-input.component.css'
+  selector: 'checkbox-input',
+  templateUrl: './checkbox-input.component.html',
+  styleUrl: './checkbox-input.component.css'
 })
-export class TextInputComponent {
+export class CheckboxInputComponent {
   @Input() control!: AbstractControl;
   @Input() showErrorsWhen: boolean = true;
   @Input() label!: string;
-  @Input() type: 'text' | 'email' | 'password' | 'date' = 'text';
 
   get formControl() {
     return this.control as FormControl;

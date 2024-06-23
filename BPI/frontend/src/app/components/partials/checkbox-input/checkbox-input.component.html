@@ -1,0 +1,10 @@
+<input-container [label]="label">
+    <div class="form-group form-check" [ngClass]="{'has-error': control.invalid && showErrorsWhen}">
+        <input type="checkbox" id="forOrganization" [formControl]="formControl" class="form-check-input" />
+        <label for="forOrganization" class="form-check-label">{{ label }}</label>
+        <input-validation
+            [control]="control"
+            [showErrorsWhen]="showErrorsWhen">
+        </input-validation>
+    </div>
+</input-container>

@@ -9,8 +9,9 @@
 label {
     display: inline-block;
     margin-left: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #5f5f5f;
+    padding-bottom: .8rem;
 }
 
 .content {

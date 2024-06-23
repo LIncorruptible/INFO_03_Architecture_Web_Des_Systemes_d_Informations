@@ -33,7 +33,7 @@
             </select>
         </div>
 
-        <button *ngIf="isAdmin" (click)="create()" class="btn btn-success btn-sm mx-1">Create</button>
+        <button *ngIf="isAdmin" routerLink="/materials/add" class="btn btn-success btn-sm mx-1">Create</button>
     </div>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">

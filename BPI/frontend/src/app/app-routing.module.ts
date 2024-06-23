@@ -6,6 +6,7 @@ import { RegisterPageComponent } from './components/pages/register-page/register
 import { InventoryPageComponent } from './components/pages/inventory-page/inventory-page.component';
 import { UsersPageComponent } from './components/pages/users-page/users-page.component';
 import { RequestsPageComponent } from './components/pages/requests-page/requests-page.component';
+import { MaterialformPageComponent } from './components/pages/materialform-page/materialform-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'users', component: UsersPageComponent},
   { path: 'users/search/:searchTerm', component: UsersPageComponent},
   { path: 'requests', component: RequestsPageComponent},
+  { path: 'materials/add', component: MaterialformPageComponent},
 ];
 
 @NgModule({
