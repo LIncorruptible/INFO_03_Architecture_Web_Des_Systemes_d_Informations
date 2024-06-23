@@ -239,7 +239,10 @@ export class MaterialController {
 
     assign = async (req: Request, res: Response) => {
         const { user } = req.body;
-        const material = await MaterialModel.findById(req.params.id);
+        const material = await MaterialModel
+            .findById(req.params.id)
+            .populate("taggedAs")
+            .populate("assignedTo");
         if (material) {
             material.assignedTo = user;
             material.status = USED;

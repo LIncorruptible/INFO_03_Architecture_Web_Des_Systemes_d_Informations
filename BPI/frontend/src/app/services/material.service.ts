@@ -60,7 +60,7 @@ export class MaterialService {
   assign(material: Material, user: User): Observable<Material> {
     return this.http.put<Material>(
       URLS.MATERIALS.ASSIGN + material.id,
-      user
+      { user: user}
     ).pipe(
       tap(
         {

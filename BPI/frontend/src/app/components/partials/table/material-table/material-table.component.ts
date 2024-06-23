@@ -5,12 +5,10 @@ import { UserService } from '../../../../services/user.service';
 import { MATERIAL_STATUS, REQUEST_TYPES, ROLES_SCOPES } from '../../../../shared/constants/all_about_models';
 import { User } from '../../../../shared/models/User';
 import { RequestService } from '../../../../services/request.service';
-import { Request as RequestModel } from '../../../../shared/models/Request';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { Tag } from '../../../../shared/models/Tag';
 import { TagService } from '../../../../services/tag.service';
-import { FormControl, FormControlState } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 const ADMIN = ROLES_SCOPES[0];
 
@@ -31,6 +29,8 @@ export class MaterialTableComponent {
 
   user!: User;
 
+  targetName: string = DEFAULT_SELECTED_CHOICE;
+
   materials!: Material[];
 
   selectedTag: string = DEFAULT_SELECTED_CHOICE;
@@ -49,6 +49,7 @@ export class MaterialTableComponent {
     private requestService: RequestService,
     private tagService: TagService,
     private activatedRoute: ActivatedRoute,
+    private route: Router
   ) {
     this.userService.userObservable.subscribe((newUser) => {
       this.user = newUser;
@@ -62,6 +63,10 @@ export class MaterialTableComponent {
       this.userService.getById(params['id']).subscribe((targetUser) => {
         this.materialService.getAccordingToUserRoleScope(targetUser).subscribe((newMaterials) => {
           this.materials = newMaterials;
+          this.targetName = (
+            targetUser.roleScope === ADMIN
+          ) ? "ALL" 
+          : targetUser.firstName + ' ' + targetUser.lastName + ' inventory (' + targetUser.roleScope + ')';
         });
       });
     });
@@ -97,7 +102,21 @@ export class MaterialTableComponent {
   }
 
   assign(material: Material) {
-    throw new Error('Method not implemented.');
+    const userId = this.activatedRoute.snapshot.params['id'];
+    if (userId) {
+      this.userService.getById(userId).subscribe((targetUser) => {
+        this.materialService.assign(material, targetUser).subscribe((updatedMaterial) => {
+          this.materials = this.materials.map((m) => {
+            if (m.id === updatedMaterial.id) {
+              return updatedMaterial;
+            }
+            return m;
+          });
+        });
+      });
+    } else {
+      this.route.navigateByUrl('/users');
+    }
   }
 
   request(material: Material) {
