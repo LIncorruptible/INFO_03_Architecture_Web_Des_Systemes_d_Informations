@@ -1,0 +1,27 @@
+.container {
+    margin: 2rem auto;
+    max-width: 600px;
+    padding: 1rem;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+  
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.role-select {
+    width: 100%;
+    margin-bottom: 1rem;
+}

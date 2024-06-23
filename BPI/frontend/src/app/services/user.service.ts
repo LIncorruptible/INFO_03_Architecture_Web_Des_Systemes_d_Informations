@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IUserLogin } from '../shared/interface/IUserLogin';
 import { URLS } from '../shared/constants/urls';
 import { IUserRegister } from '../shared/interface/IUserRegister';
+import { INewUser } from '../shared/interface/INewUser';
 
 const USER_KEY = "User";
 
@@ -106,6 +107,25 @@ export class UserService {
                 error: (errorResponse) => {
                     this.toastrService.error(
                         'Registration failed' 
+                        + (errorResponse as HttpErrorResponse).error.message
+                    );
+                }
+            })
+        );
+    }
+
+    create = (user: INewUser): Observable<User> => {
+        return this.http.post<User>(
+            URLS.USERS.ADD,
+            user
+        ).pipe(
+            tap({
+                next: (user) => {
+                    this.toastrService.success('User created');
+                },
+                error: (errorResponse) => {
+                    this.toastrService.error(
+                        'User creation failed' 
                         + (errorResponse as HttpErrorResponse).error.message
                     );
                 }

@@ -1,0 +1,44 @@
+<div class="container mt-3">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+        <h2>New user</h2>
+
+        <input-container label="Role">
+            <select [formControl]="$any(fc['roleScope'])" class="role-select form-control" name="role-select" [(ngModel)]="nrSelect">
+                <option value="" disabled>Select Role</option>
+                <option *ngFor="let role of roles" [ngValue]="role">{{ role }}</option>
+            </select>
+            <input-validation [control]="fc['roleScope']" [showErrorsWhen]="isSubmitted"></input-validation>
+        </input-container>
+
+        <text-input
+        [control]="fc['firstName']"
+        [showErrorsWhen]="isSubmitted"
+        label="First Name">
+        </text-input>
+
+        <text-input
+        [control]="fc['lastName']"
+        [showErrorsWhen]="isSubmitted"
+        label="Last Name">
+        </text-input>
+
+        <text-input
+        [control]="fc['email']"
+        [showErrorsWhen]="isSubmitted"
+        label="Email"
+        type="email">
+        </text-input>
+      
+        <select-input
+        [control]="fc['assignedTo']"
+        [showErrorsWhen]="isSubmitted"
+        label="Organization"
+        typeObj="organization"
+        viewValue="name">
+        </select-input>
+  
+      <default-button text="Create"></default-button>
+    </form>
+  </div>
+  

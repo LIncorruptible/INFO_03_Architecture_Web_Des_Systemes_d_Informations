@@ -129,20 +129,23 @@ export class UserController {
     }
 
     add = async (req: Request, res: Response) => {
-        const { username, email, password, firstName, lastName, assignedTo, roleScope } = req.body;
-        if (await this.isAlreadyExists(username, email)) {
+        const { firstName, lastName, email, assignedTo, roleScope } = req.body;
+        if (await this.isAlreadyExists("", email)) {
             res.status(HTTP_STATUS.BAD_REQUEST).send({ message: "User already exists" });
             return;
         }
-        const user = new UserModel({
-            username,
+        
+        let user = new UserModel({
+            firstName: firstName[0].toUpperCase() + firstName.slice(1),
+            lastName: lastName.toUpperCase(),
             email,
-            password,
-            firstName,
-            lastName,
             assignedTo,
             roleScope
         });
+
+        user.password = await bcrypt.hash("defaultpwd", 10);
+        user.username = `${firstName.toLowerCase()}${lastName.toLowerCase()}`;
+
         const createdUser = await user.save();
         if (createdUser) {
             res.status(HTTP_STATUS.CREATED).send(createdUser);

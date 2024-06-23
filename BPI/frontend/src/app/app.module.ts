@@ -35,6 +35,7 @@ import { RequestsPageComponent } from './components/pages/requests-page/requests
 import { RequestTableComponent } from './components/partials/table/request-table/request-table.component';
 import { MaterialformPageComponent } from './components/pages/materialform-page/materialform-page.component';
 import { CheckboxInputComponent } from './components/partials/checkbox-input/checkbox-input.component';
+import { UserformPageComponent } from './components/pages/userform-page/userform-page.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { CheckboxInputComponent } from './components/partials/checkbox-input/che
     RequestsPageComponent,
     RequestTableComponent,
     MaterialformPageComponent,
-    CheckboxInputComponent
+    CheckboxInputComponent,
+    UserformPageComponent
   ],
   imports: [
     BrowserModule,
