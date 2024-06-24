@@ -1,4 +1,4 @@
-# AZIL - Application web de réservations de location saisonnière
+# BPI - Application Web Angular TS Express MongoDB
 
 ⚠️ _Ce projet a été réalisé dans le cadre d'un exercice annuel de développement projet (architectures web des systèmes d'informations) du MASTER MIAGE à Amiens. Il s'agit d'une simulation visant à mettre en pratique les connaissances acquises dans le domaine du développement logiciel, de la gestion de projet et de l'analyse des besoins des utilisateurs. L'objectif principal de cet exercice est de permettre aux étudiants de développer leurs compétences techniques et de renforcer leur compréhension des principes de développement logiciel tout en travaillant sur un cas concret et réaliste. Aucune rémunération ou mise en publication n'est à prévoir, ce projet étant exclusivement destiné à des fins pédagogiques._ ⚠️
 
@@ -123,4 +123,4 @@ Assurez-vous de suivre ces instructions dans l'ordre pour une installation et un
 
 ---
 
-_Ce Readme a été rédigé avec soin par Maël RHUIN et Reda ES SALHI._
+_Ce Readme a été rédigé par Maël RHUIN et Reda ES SALHI._
