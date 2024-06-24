@@ -1,5 +1,4 @@
 import { HTTP_STATUS } from "../constants/http_status";
-import { OrganizationModel } from "../models/organization.model";
 import { User, UserModel } from "../models/user.model";
 import { Response, Request } from "express";
 import { UserSeeder } from "../seeders/user.seeder";
@@ -9,7 +8,6 @@ import { SECRET_KEY } from "../configs/config";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
 import mongoose from "mongoose";
-import { MaterialSeeder } from "../seeders/material.seeder";
 
 export class UserController {
 
