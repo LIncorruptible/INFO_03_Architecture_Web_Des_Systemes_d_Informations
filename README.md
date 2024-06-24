@@ -107,6 +107,15 @@ Ce projet demande de faire fonctionner en parallèle :
     ```
     npm start
     ```
+3. **Générer les documents de base**
+
+    Dans un navigateur ou une solution logicielle permettant le test d'api, exécutez les routes suivantes :
+    ```
+    localhost:5000/api/tags/seed
+    localhost:5000/api/organizations/seed
+    localhost:5000/api/users/seed
+    localhost:5000/api/materials/seed
+    ```
 
 ⚠️ _Ne fermez pas les terminaux tant que vous testez l'application._ ⚠️
 
