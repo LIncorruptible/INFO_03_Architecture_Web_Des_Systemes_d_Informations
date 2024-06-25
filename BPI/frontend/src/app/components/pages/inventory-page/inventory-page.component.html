@@ -6,7 +6,8 @@
         <not-found
         [visible]="!numberOfMaterials || numberOfMaterials === 0"
         notFoundMessage="No materials found"
-        resetLinkText="Request a material"
+        [resetLinkText]="(isAdmin) ? 'Add a new material' : 'Go back'"
+        [resetLinkRoute]="(isAdmin) ? '/materials/add' : ''"
         ></not-found>
     </div>
 </div>

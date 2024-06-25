@@ -144,6 +144,7 @@ export class MaterialController {
             .populate("taggedAs")
             .populate("assignedTo");
         if (materials) {
+            console.log(materials)
             res.send(materials);
         } else {
             res.status(HTTP_STATUS.NOT_FOUND).send({ message: "Materials not found" });
