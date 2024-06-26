@@ -116,6 +116,12 @@ Ce projet demande de faire fonctionner en parallèle :
     localhost:5000/api/users/seed
     localhost:5000/api/materials/seed
     ```
+4. **Connexion**
+   Un utilisateur adminsitrateur est créé par le seed :
+```
+email : johndoe@email.com
+pwd : admin
+```
 
 ⚠️ _Ne fermez pas les terminaux tant que vous testez l'application._ ⚠️
 
